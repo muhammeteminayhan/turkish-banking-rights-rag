@@ -13,8 +13,8 @@ Snapshot: 2026-10-23. Machine-readable version: [`data/manifest.json`](../data/m
   `Noindex` lines for Googlebot, no `Disallow`. A missing robots.txt (4xx) allows crawling;
   401/403 disallows everything; 5xx stops the host. Redirects of robots.txt are followed.
   Known limitation: the standard-library parser ignores `*`/`$` wildcards in rules.
-- **Allowlist:** every hop, including redirects, must be `https://www.mevzuat.gov.tr` on
-  port 443. The text iframe must point to `/anasayfa/MevzuatFihristDetayIframe` there, and
+- **Allowlist:** every hop, including redirects, must be `https://www.mevzuat.gov.tr` or
+  `https://www.tcmb.gov.tr` on port 443 (www.tcmb.gov.tr has no robots.txt: HTTP 404). The text iframe must point to `/anasayfa/MevzuatFihristDetayIframe` there, and
   files must be under `/MevzuatMetin/` with `.doc`, `.docx` or `.pdf` (one per extension).
 - **Size and time caps:** bodies are streamed uncompressed (`Accept-Encoding: identity`),
   capped at 50 MB (robots.txt 512 KB) and 180 s per request.
@@ -45,7 +45,22 @@ per document (5464 has `.docx`; 11180, 19798 and 38873 have no PDF).
 The document page has no title; the title is the first all-caps block of the text iframe.
 The page carries `Resmî Gazete Tarihi: dd.mm.yyyy Resmî Gazete Sayısı: n`.
 
-## Corpus (15 documents)
+## TCMB documents (origin `tcmb`)
+
+The current fee caps of Tebliğ 2020/7 are published only by TCMB, in its *Uygulama
+Talimatı*, a PDF on the
+[Bankacılık ile İlgili Mevzuat](https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/)
+page. The PDF URL contains the version date and changes with every version, e.g.
+`/wps/wcm/connect/9fcd654e-…/2023-39+sayılı+FT+Tebliği+Uygulama+Talimatı+-13+Ocak+2026.pdf`,
+so the fetcher finds it on that page by its exact link text ("…Tebliğe (Sayı: 2020/7)
+İlişkin Uygulama Talimatı") and reads the version date from the file name. If TCMB
+publishes a new version, the manifest build fails until `expected_version_date` in
+`data/sources.yaml` is updated, so an outdated amount can never be used silently.
+The talimat has no Resmî Gazete date or issue; its manifest entry has `rg_date: null` and
+`version_date: 2026-01-13`. Answers that cite it must show that version date (decision of
+2026-10-23, applies from M4).
+
+## Corpus (16 documents)
 
 Every RG date/number below was read from the official mevzuat.gov.tr page and checked
 against `data/sources.yaml`; 19798, 10735 and 38873 were also cross-checked against the
@@ -59,6 +74,7 @@ Resmî Gazete daily index. "Notes" = dated amendment notes found in the consolid
 | `6493` | Ödeme ve Menkul Kıymet Mutabakat Sistemleri, Ödeme Hizmetleri ve Elektronik Para Kuruluşları Hakkında Kanun | 6493/1 | 27.06.2013 / 28690 | 31 | 18.06.2020 (7247) |
 | `6698` | Kişisel Verilerin Korunması Kanunu | 6698/1 | 07.04.2016 / 29677 | 10 | 02.03.2024 (7499) |
 | `tcmb-ucret-teblig` | Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğ (2020/7, TCMB) | 34343/9 | 07.03.2020 / 31061 | 11 | 22.12.2023 (RG 32407) |
+| `tcmb-ucret-talimat` | Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğe (Sayı: 2020/7) İlişkin Uygulama Talimatı (TCMB) | – (tcmb.gov.tr) | not in RG; version 13.01.2026 | read in M2 | – |
 | `tuketici-kredisi-yon` | Tüketici Kredisi Sözleşmeleri Yönetmeliği | 20767/7 | 22.05.2015 / 29363 | 20 | 31.12.2024 (RG 32769) |
 | `kart-yon` | Banka Kartları ve Kredi Kartları Hakkında Yönetmelik (BDDK) | 11180/7 | 10.03.2007 / 26458 | 71 | 25.09.2020 (RG 31255) |
 | `konut-finansmani-yon` | Konut Finansmanı Sözleşmeleri Yönetmeliği | 20793/7 | 28.05.2015 / 29369 | 17 | 31.12.2024 (RG 32769) |
@@ -86,7 +102,8 @@ June 2026 amendment), but checking for newer changes is Phase 2 (Resmî Gazete t
    Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğe (Sayı: 2020/7)
    İlişkin Uygulama Talimatı" (tcmb.gov.tr PDF, version dated 13.01.2026), e.g. its EFT
    cap table "from 6/1/2026". That document is not on mevzuat.gov.tr and not published in
-   the Resmî Gazete. Whether to add it is an open decision (see M1 report).
+   the Resmî Gazete. **Decision (2026-10-23): added as the 16th document**, see
+   "TCMB documents" above.
 3. **Some `.doc` downloads are not Word binaries.** For 11180, 19798 and 38873 the `.doc`
    is a Word "web page" export: HTML in UTF-16LE with a BOM. These are kept and labelled
    `doc_html` in the manifest.

@@ -1,6 +1,9 @@
 # Hand-curated list of the documents in the corpus.
 # Read by finhak.ingest.sources.load_sources (scripts/fetch_sources.py).
 #
+# origin: mevzuat (default) or tcmb. A tcmb entry names a listing page on www.tcmb.gov.tr
+# and the exact link text of the document there; the PDF URL is read from that page.
+#
 # mevzuat_no / mevzuat_tur come from mevzuat.gov.tr page URLs:
 #   https://www.mevzuat.gov.tr/mevzuat?MevzuatNo={mevzuat_no}&MevzuatTur={mevzuat_tur}&MevzuatTertip=5
 #   mevzuat_tur: 1 = Kanun, 7 = Kurum ve Kuruluş Yönetmeliği, 9 = Tebliğ
@@ -86,6 +89,25 @@ sources:
     issuer: TCMB
     expected_rg_date: "2020-03-07"
     expected_rg_number: "31061"
+
+  # --- TCMB talimatı (not on mevzuat.gov.tr, not published in the Resmî Gazete) ---
+  # Holds the current, CPI-updated fee caps of the Tebliğ above (e.g. EFT caps "from
+  # 6/1/2026"). TCMB replaces the PDF every year; when expected_version_date no longer
+  # matches the file on the site, the manifest build fails and this entry must be updated.
+  - id: tcmb-ucret-talimat
+    label: Ücret Tebliği Uygulama Talimatı (TCMB, 13.01.2026)
+    expected_title: >-
+      Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğe
+      (Sayı: 2020/7) İlişkin Uygulama Talimatı
+    doc_type: talimat
+    origin: tcmb
+    listing_url: https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/
+    link_text: >-
+      Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğe
+      (Sayı: 2020/7) İlişkin Uygulama Talimatı
+    number: null
+    issuer: TCMB
+    expected_version_date: "2026-01-13"
 
   # --- Yönetmelikler ---
   - id: tuketici-kredisi-yon

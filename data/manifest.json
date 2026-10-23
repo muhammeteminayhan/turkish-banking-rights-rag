@@ -4,6 +4,7 @@
     {
       "id": "6502",
       "label": "6502 sayılı Tüketicinin Korunması Hakkında Kanun",
+      "origin": "mevzuat",
       "title": "TÜKETİCİNİN KORUNMASI HAKKINDA KANUN",
       "doc_type": "kanun",
       "number": "6502",
@@ -12,6 +13,7 @@
       "issuer": "TBMM",
       "rg_date": "2013-11-28",
       "rg_number": "28835",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6502&MevzuatTur=1&MevzuatTertip=5",
       "files": [
         {
@@ -59,6 +61,7 @@
     {
       "id": "5411",
       "label": "5411 sayılı Bankacılık Kanunu",
+      "origin": "mevzuat",
       "title": "BANKACILIK KANUNU",
       "doc_type": "kanun",
       "number": "5411",
@@ -67,6 +70,7 @@
       "issuer": "TBMM",
       "rg_date": "2005-11-01",
       "rg_number": "25983",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5411&MevzuatTur=1&MevzuatTertip=5",
       "files": [
         {
@@ -114,6 +118,7 @@
     {
       "id": "5464",
       "label": "5464 sayılı Banka Kartları ve Kredi Kartları Kanunu",
+      "origin": "mevzuat",
       "title": "BANKA KARTLARI VE KREDİ KARTLARI KANUNU",
       "doc_type": "kanun",
       "number": "5464",
@@ -122,6 +127,7 @@
       "issuer": "TBMM",
       "rg_date": "2006-03-01",
       "rg_number": "26095",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5464&MevzuatTur=1&MevzuatTertip=5",
       "files": [
         {
@@ -169,6 +175,7 @@
     {
       "id": "6493",
       "label": "6493 sayılı Ödeme Hizmetleri ve Elektronik Para Kuruluşları Kanunu",
+      "origin": "mevzuat",
       "title": "ÖDEME VE MENKUL KIYMET MUTABAKAT SİSTEMLERİ, ÖDEME HİZMETLERİ VE ELEKTRONİK PARA KURULUŞLARI HAKKINDA KANUN",
       "doc_type": "kanun",
       "number": "6493",
@@ -177,6 +184,7 @@
       "issuer": "TBMM",
       "rg_date": "2013-06-27",
       "rg_number": "28690",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6493&MevzuatTur=1&MevzuatTertip=5",
       "files": [
         {
@@ -224,6 +232,7 @@
     {
       "id": "6698",
       "label": "6698 sayılı Kişisel Verilerin Korunması Kanunu",
+      "origin": "mevzuat",
       "title": "KİŞİSEL VERİLERİN KORUNMASI KANUNU",
       "doc_type": "kanun",
       "number": "6698",
@@ -232,6 +241,7 @@
       "issuer": "TBMM",
       "rg_date": "2016-04-07",
       "rg_number": "29677",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6698&MevzuatTur=1&MevzuatTertip=5",
       "files": [
         {
@@ -279,6 +289,7 @@
     {
       "id": "tcmb-ucret-teblig",
       "label": "Finansal Tüketicilerden Alınacak Ücretler Tebliği (2020/7)",
+      "origin": "mevzuat",
       "title": "FİNANSAL TÜKETİCİLERDEN ALINACAK ÜCRETLERE İLİŞKİN USÛL VE ESASLAR HAKKINDA TEBLİĞ",
       "doc_type": "teblig",
       "number": "2020/7",
@@ -287,6 +298,7 @@
       "issuer": "TCMB",
       "rg_date": "2020-03-07",
       "rg_number": "31061",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=34343&MevzuatTur=9&MevzuatTertip=5",
       "files": [
         {
@@ -332,8 +344,46 @@
       "status": "in_force"
     },
     {
+      "id": "tcmb-ucret-talimat",
+      "label": "Ücret Tebliği Uygulama Talimatı (TCMB, 13.01.2026)",
+      "origin": "tcmb",
+      "title": "Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğe (Sayı: 2020/7) İlişkin Uygulama Talimatı",
+      "doc_type": "talimat",
+      "number": null,
+      "mevzuat_no": null,
+      "mevzuat_tur": null,
+      "issuer": "TCMB",
+      "rg_date": null,
+      "rg_number": null,
+      "version_date": "2026-01-13",
+      "source_page_url": "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "tcmb-ucret-talimat/page.html",
+          "url": "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/",
+          "sha256": "ce516d7a42187b67cb88289fa9595d0287c1e1e5737f1a91e48753f03ed182b5",
+          "bytes": 70387,
+          "fetched_at": "2026-10-23T15:22:33.979279Z"
+        },
+        {
+          "format": "pdf",
+          "path": "tcmb-ucret-talimat/source.pdf",
+          "url": "https://www.tcmb.gov.tr/wps/wcm/connect/9fcd654e-65a7-4c42-8292-06ec3846e751/2023-39+say%C4%B1l%C4%B1+FT+Tebli%C4%9Fi+Uygulama+Talimat%C4%B1+-13+Ocak+2026.pdf?MOD=AJPERES&CACHEID=ROOTWORKSPACE-9fcd654e-65a7-4c42-8292-06ec3846e751-pKSwC.I",
+          "sha256": "4ecbbf017a925575c5ecbba41973c6ccf98ccdb8a2b752fdc2ce8d2cd92ee6f2",
+          "bytes": 216213,
+          "fetched_at": "2026-10-23T15:22:35.119345Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": null,
+      "amendment_note_count": null,
+      "status": "in_force"
+    },
+    {
       "id": "tuketici-kredisi-yon",
       "label": "Tüketici Kredisi Sözleşmeleri Yönetmeliği",
+      "origin": "mevzuat",
       "title": "TÜKETİCİ KREDİSİ SÖZLEŞMELERİ YÖNETMELİĞİ",
       "doc_type": "yonetmelik",
       "number": null,
@@ -342,6 +392,7 @@
       "issuer": "Ticaret Bakanlığı",
       "rg_date": "2015-05-22",
       "rg_number": "29363",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20767&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -389,6 +440,7 @@
     {
       "id": "kart-yon",
       "label": "Banka Kartları ve Kredi Kartları Hakkında Yönetmelik",
+      "origin": "mevzuat",
       "title": "BANKA KARTLARI VE KREDİ KARTLARI HAKKINDA YÖNETMELİK",
       "doc_type": "yonetmelik",
       "number": null,
@@ -397,6 +449,7 @@
       "issuer": "BDDK",
       "rg_date": "2007-03-10",
       "rg_number": "26458",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=11180&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -436,6 +489,7 @@
     {
       "id": "konut-finansmani-yon",
       "label": "Konut Finansmanı Sözleşmeleri Yönetmeliği",
+      "origin": "mevzuat",
       "title": "KONUT FİNANSMANI SÖZLEŞMELERİ YÖNETMELİĞİ",
       "doc_type": "yonetmelik",
       "number": null,
@@ -444,6 +498,7 @@
       "issuer": "Ticaret Bakanlığı",
       "rg_date": "2015-05-28",
       "rg_number": "29369",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20793&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -491,6 +546,7 @@
     {
       "id": "odeme-hizmetleri-yon",
       "label": "Ödeme Hizmetleri ve Elektronik Para İhracı Yönetmeliği",
+      "origin": "mevzuat",
       "title": "ÖDEME HİZMETLERİ VE ELEKTRONİK PARA İHRACI İLE ÖDEME HİZMETİ SAĞLAYICILARI HAKKINDA YÖNETMELİK",
       "doc_type": "yonetmelik",
       "number": null,
@@ -499,6 +555,7 @@
       "issuer": "TCMB",
       "rg_date": "2021-12-01",
       "rg_number": "31676",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=39080&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -546,6 +603,7 @@
     {
       "id": "hakem-heyetleri-yon",
       "label": "Tüketici Hakem Heyetleri Yönetmeliği",
+      "origin": "mevzuat",
       "title": "TÜKETİCİ HAKEM HEYETLERİ YÖNETMELİĞİ",
       "doc_type": "yonetmelik",
       "number": null,
@@ -554,6 +612,7 @@
       "issuer": "Ticaret Bakanlığı",
       "rg_date": "2022-09-21",
       "rg_number": "31960",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=39730&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -596,6 +655,7 @@
     {
       "id": "mesafeli-finansal-yon",
       "label": "Finansal Hizmetlere İlişkin Mesafeli Sözleşmeler Yönetmeliği",
+      "origin": "mevzuat",
       "title": "FİNANSAL HİZMETLERE İLİŞKİN MESAFELİ SÖZLEŞMELER YÖNETMELİĞİ",
       "doc_type": "yonetmelik",
       "number": null,
@@ -604,6 +664,7 @@
       "issuer": "Ticaret Bakanlığı",
       "rg_date": "2015-01-31",
       "rg_number": "29253",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20495&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -651,6 +712,7 @@
     {
       "id": "haksiz-sartlar-yon",
       "label": "Tüketici Sözleşmelerindeki Haksız Şartlar Hakkında Yönetmelik",
+      "origin": "mevzuat",
       "title": "TÜKETİCİ SÖZLEŞMELERİNDEKİ HAKSIZ ŞARTLAR HAKKINDA YÖNETMELİK",
       "doc_type": "yonetmelik",
       "number": null,
@@ -659,6 +721,7 @@
       "issuer": "Ticaret Bakanlığı",
       "rg_date": "2014-06-17",
       "rg_number": "29033",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=19798&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -694,6 +757,7 @@
     {
       "id": "mevduat-yon",
       "label": "Mevduat ve Katılım Fonunun Kabulü, Çekilmesi ve Zamanaşımı Yönetmeliği",
+      "origin": "mevzuat",
       "title": "MEVDUAT VE KATILIM FONUNUN KABULÜNE, ÇEKİLMESİNE VE ZAMANAŞIMINA UĞRAYAN MEVDUAT, KATILIM FONU, EMANET VE ALACAKLARA İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
       "doc_type": "yonetmelik",
       "number": null,
@@ -702,6 +766,7 @@
       "issuer": "BDDK",
       "rg_date": "2006-11-01",
       "rg_number": "26333",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=10735&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {
@@ -749,6 +814,7 @@
     {
       "id": "erisilebilirlik-yon",
       "label": "Bankacılık Hizmetlerinin Erişilebilirliğine Dair Yönetmelik",
+      "origin": "mevzuat",
       "title": "BANKACILIK HİZMETLERİNİN ERİŞİLEBİLİRLİĞİNE DAİR YÖNETMELİK",
       "doc_type": "yonetmelik",
       "number": null,
@@ -757,6 +823,7 @@
       "issuer": "BDDK",
       "rg_date": "2016-06-18",
       "rg_number": "29746",
+      "version_date": null,
       "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=38873&MevzuatTur=7&MevzuatTertip=5",
       "files": [
         {

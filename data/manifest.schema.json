@@ -93,8 +93,16 @@
           "title": "Label",
           "type": "string"
         },
+        "origin": {
+          "enum": [
+            "mevzuat",
+            "tcmb"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
         "title": {
-          "description": "as printed at the top of the official consolidated text",
+          "description": "mevzuat: as printed at the top of the consolidated text; tcmb: the link text on the TCMB listing page",
           "title": "Title",
           "type": "string"
         },
@@ -102,7 +110,8 @@
           "enum": [
             "kanun",
             "yonetmelik",
-            "teblig"
+            "teblig",
+            "talimat"
           ],
           "title": "Doc Type",
           "type": "string"
@@ -119,25 +128,67 @@
           "title": "Number"
         },
         "mevzuat_no": {
-          "title": "Mevzuat No",
-          "type": "integer"
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mevzuat No"
         },
         "mevzuat_tur": {
-          "title": "Mevzuat Tur",
-          "type": "integer"
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mevzuat Tur"
         },
         "issuer": {
           "title": "Issuer",
           "type": "string"
         },
         "rg_date": {
-          "format": "date",
-          "title": "Rg Date",
-          "type": "string"
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "None for texts not published in the RG",
+          "title": "Rg Date"
         },
         "rg_number": {
-          "title": "Rg Number",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rg Number"
+        },
+        "version_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "tcmb: the version date in the file name on the issuer's site",
+          "title": "Version Date"
         },
         "source_page_url": {
           "title": "Source Page Url",
@@ -169,12 +220,20 @@
           "description": "latest dated amendment note found in the consolidated text"
         },
         "amendment_note_count": {
-          "title": "Amendment Note Count",
-          "type": "integer"
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "None when the notes are not read at collection time (tcmb PDFs)",
+          "title": "Amendment Note Count"
         },
         "status": {
           "const": "in_force",
-          "description": "declared in sources.yaml: the text was listed as current on mevzuat.gov.tr when collected; not machine-checked",
+          "description": "declared in sources.yaml: the text was listed as current on the official site when collected; not machine-checked",
           "title": "Status",
           "type": "string"
         }
@@ -182,6 +241,7 @@
       "required": [
         "id",
         "label",
+        "origin",
         "title",
         "doc_type",
         "number",
@@ -190,6 +250,7 @@
         "issuer",
         "rg_date",
         "rg_number",
+        "version_date",
         "source_page_url",
         "files",
         "rejected_files",

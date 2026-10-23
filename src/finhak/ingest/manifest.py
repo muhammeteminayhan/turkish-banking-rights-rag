@@ -28,7 +28,8 @@ from finhak.ingest.fetch import (
 )
 from finhak.ingest.http import FetchError
 from finhak.ingest.scrape import PageInfo, TextInfo, decode_html, parse_page, parse_text
-from finhak.ingest.sources import DocType, SourceSpec
+from finhak.ingest.sources import DocType, Origin, SourceSpec
+from finhak.ingest.tcmb import find_listing_link, version_date_from_url
 from finhak.textnorm import tr_casefold
 
 SCHEMA_VERSION: Final = 1
@@ -87,24 +88,35 @@ class ManifestEntry(BaseModel):
 
     id: str
     label: str
-    title: str = Field(description="as printed at the top of the official consolidated text")
+    origin: Origin
+    title: str = Field(
+        description=(
+            "mevzuat: as printed at the top of the consolidated text; "
+            "tcmb: the link text on the TCMB listing page"
+        )
+    )
     doc_type: DocType
     number: str | None
-    mevzuat_no: int
-    mevzuat_tur: int
+    mevzuat_no: int | None
+    mevzuat_tur: int | None
     issuer: str
-    rg_date: dt.date
-    rg_number: str
+    rg_date: dt.date | None = Field(description="None for texts not published in the RG")
+    rg_number: str | None
+    version_date: dt.date | None = Field(
+        description="tcmb: the version date in the file name on the issuer's site"
+    )
     source_page_url: str
     files: tuple[FileEntry, ...]
     rejected_files: tuple[RejectedFile, ...]
     last_amendment: LastAmendment | None = Field(
         description="latest dated amendment note found in the consolidated text"
     )
-    amendment_note_count: int
+    amendment_note_count: int | None = Field(
+        description="None when the notes are not read at collection time (tcmb PDFs)"
+    )
     status: Literal["in_force"] = Field(
         description=(
-            "declared in sources.yaml: the text was listed as current on mevzuat.gov.tr "
+            "declared in sources.yaml: the text was listed as current on the official site "
             "when collected; not machine-checked"
         )
     )
@@ -132,7 +144,43 @@ def build_entry(spec: SourceSpec, raw_dir: Path) -> ManifestEntry:
         raise ManifestError(f"{spec.id}: {exc}") from exc
     if not log.files:
         raise ManifestError(f"{spec.id}: {doc_dir / FETCH_LOG_NAME} missing; run the fetcher")
+    if spec.origin == "tcmb":
+        return _tcmb_entry(spec, doc_dir, log)
+    return _mevzuat_entry(spec, doc_dir, log)
 
+
+def _tcmb_entry(spec: SourceSpec, doc_dir: Path, log: FetchLog) -> ManifestEntry:
+    link = find_listing_link(_read_html(doc_dir / PAGE_NAME), spec.page_url, spec.link_text or "")
+    version = version_date_from_url(link.url)
+    problems: list[str] = []
+    if spec.expected_title and tr_casefold(spec.expected_title) != tr_casefold(link.text):
+        problems.append(f"title: listing {link.text!r} vs sources.yaml {spec.expected_title!r}")
+    if spec.expected_version_date and spec.expected_version_date != version:
+        problems.append(
+            f"version_date: file on the site is {version} "
+            f"vs sources.yaml {spec.expected_version_date} ({link.url})"
+        )
+    if problems:
+        raise ManifestMismatch(f"{spec.id}: " + "; ".join(problems))
+
+    name = source_file_name(link.url)
+    document = _file_entry(spec.id, doc_dir, None, name, log)
+    if document.url != link.url:
+        raise ManifestError(f"{spec.id}: {name} is not the file the listing links; run the fetcher")
+    return ManifestEntry(
+        **_curated_fields(spec),
+        title=link.text,
+        rg_date=None,
+        rg_number=None,
+        version_date=version,
+        files=(_file_entry(spec.id, doc_dir, "html_page", PAGE_NAME, log), document),
+        rejected_files=(),
+        last_amendment=None,
+        amendment_note_count=None,
+    )
+
+
+def _mevzuat_entry(spec: SourceSpec, doc_dir: Path, log: FetchLog) -> ManifestEntry:
     page = parse_page(_read_html(doc_dir / PAGE_NAME), spec.page_url)
     text = parse_text(_read_html(doc_dir / TEXT_NAME))
     problems = _disagreements(spec, page, text)
@@ -161,17 +209,11 @@ def build_entry(spec: SourceSpec, raw_dir: Path) -> ManifestEntry:
     )
     latest = text.latest_amendment
     return ManifestEntry(
-        id=spec.id,
-        label=spec.label,
+        **_curated_fields(spec),
         title=text.title,
-        doc_type=spec.doc_type,
-        number=spec.number,
-        mevzuat_no=spec.mevzuat_no,
-        mevzuat_tur=spec.mevzuat_tur,
-        issuer=spec.issuer,
         rg_date=page.rg_date,
         rg_number=page.rg_number,
-        source_page_url=spec.page_url,
+        version_date=None,
         files=tuple(files),
         rejected_files=rejected,
         last_amendment=(
@@ -180,8 +222,23 @@ def build_entry(spec: SourceSpec, raw_dir: Path) -> ManifestEntry:
             else None
         ),
         amendment_note_count=len(text.amendments),
-        status="in_force",
     )
+
+
+def _curated_fields(spec: SourceSpec) -> dict[str, object]:
+    """Fields copied from sources.yaml; the rest come from the downloaded files."""
+    return {
+        "id": spec.id,
+        "label": spec.label,
+        "origin": spec.origin,
+        "doc_type": spec.doc_type,
+        "number": spec.number,
+        "mevzuat_no": spec.mevzuat_no,
+        "mevzuat_tur": spec.mevzuat_tur,
+        "issuer": spec.issuer,
+        "source_page_url": spec.page_url,
+        "status": "in_force",
+    }
 
 
 def _read_html(path: Path) -> str:

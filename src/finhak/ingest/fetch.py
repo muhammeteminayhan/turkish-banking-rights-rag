@@ -28,6 +28,7 @@ from finhak.fsutil import atomic_write_bytes, atomic_write_text
 from finhak.ingest.http import FetchError, FetchResult, PoliteClient
 from finhak.ingest.scrape import decode_html, parse_page, parse_text
 from finhak.ingest.sources import SourceSpec
+from finhak.ingest.tcmb import find_listing_link
 
 logger = logging.getLogger(__name__)
 
@@ -128,13 +129,10 @@ def fetch_source(
     spec: SourceSpec, client: PoliteClient, raw_dir: Path, refresh: bool = False
 ) -> FetchOutcome:
     store = _DocumentStore(raw_dir / spec.id, client, refresh)
-
-    page = store.get_required(PAGE_NAME, spec.page_url, _validate_page(spec.page_url))
-    info = parse_page(decode_html(page, spec.page_url), spec.page_url)
-    store.get_required(TEXT_NAME, info.text_url, _validate_text(info.text_url))
-    for url in info.file_urls:
-        store.get_optional(source_file_name(url), url)
-
+    if spec.origin == "tcmb":
+        _fetch_tcmb(spec, store)
+    else:
+        _fetch_mevzuat(spec, store)
     return FetchOutcome(
         source_id=spec.id,
         downloaded=tuple(store.downloaded),
@@ -143,6 +141,60 @@ def fetch_source(
         kept_previous=tuple(store.kept_previous),
         failed=tuple(store.failed),
     )
+
+
+def _fetch_mevzuat(spec: SourceSpec, store: "_DocumentStore") -> None:
+    """Page and consolidated HTML text are required; linked Word/PDF files are optional."""
+    page = store.get_required(PAGE_NAME, spec.page_url, _validate_page(spec.page_url))
+    info = parse_page(decode_html(page, spec.page_url), spec.page_url)
+    store.get_required(TEXT_NAME, info.text_url, _validate_text(info.text_url))
+    for url in info.file_urls:
+        store.get_optional(source_file_name(url), url)
+
+
+def _fetch_tcmb(spec: SourceSpec, store: "_DocumentStore") -> None:
+    """Listing page and the PDF are both required: the PDF is the only copy of the text."""
+    link_text = _link_text(spec)
+    listing = store.get_required(
+        PAGE_NAME, spec.page_url, _validate_listing(spec.page_url, link_text)
+    )
+    link = find_listing_link(decode_html(listing, spec.page_url), spec.page_url, link_text)
+    name = source_file_name(link.url)
+    store.get_required(name, link.url, _validate_file(name))
+
+
+def linked_files(spec: SourceSpec, page: bytes) -> list[str]:
+    """The files a stored page leads to, in fetch order (used by --dry-run)."""
+    html = decode_html(page, spec.page_url)
+    if spec.origin == "tcmb":
+        link = find_listing_link(html, spec.page_url, _link_text(spec))
+        return [source_file_name(link.url)]
+    info = parse_page(html, spec.page_url)
+    return [TEXT_NAME, *(source_file_name(url) for url in info.file_urls)]
+
+
+def _link_text(spec: SourceSpec) -> str:
+    if spec.link_text is None:
+        raise ValueError(f"{spec.id}: tcmb source without link_text")
+    return spec.link_text
+
+
+def _validate_listing(url: str, link_text: str) -> Callable[[bytes], None]:
+    """Raises ScrapeError unless the listing still links the document."""
+
+    def check(content: bytes) -> None:
+        find_listing_link(decode_html(content, url), url, link_text)
+
+    return check
+
+
+def _validate_file(name: str) -> Callable[[bytes], None]:
+    """Raises FetchError unless the bytes are what the file extension claims."""
+
+    def check(content: bytes) -> None:
+        detect_file_format(name, content)
+
+    return check
 
 
 def _validate_page(url: str) -> Callable[[bytes], None]:

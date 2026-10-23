@@ -15,3 +15,7 @@ one request per second. Legislation texts are outside copyright protection (FSEK
 `text_kanun_6502.html` and `text_yonetmelik_11180.html` are **truncated** at a paragraph
 boundary (about 64 KB and 40 KB) to keep the repository small. A closing comment marks the cut.
 Do not use them to count articles. The full texts live in `data/raw/` (not committed).
+
+`tcmb/listing_bankacilik.html` is the TCMB "Bankacılık ile İlgili Mevzuat" listing page
+(`https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/`),
+downloaded on 2026-10-23; it links the 13.01.2026 version of the fee Tebliğ's Uygulama Talimatı.

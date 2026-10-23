@@ -23,7 +23,8 @@ ROBOTS_PRODUCT_TOKEN = "finhak"
 DEFAULT_USER_AGENT = (
     f"Mozilla/5.0 (compatible; {ROBOTS_PRODUCT_TOKEN}/0.1; portfolio research on public law texts)"
 )
-DEFAULT_ALLOWED_HOSTS = frozenset({"www.mevzuat.gov.tr"})
+# mevzuat.gov.tr for legislation; www.tcmb.gov.tr for texts TCMB publishes only itself.
+DEFAULT_ALLOWED_HOSTS = frozenset({"www.mevzuat.gov.tr", "www.tcmb.gov.tr"})
 DEFAULT_TIMEOUT = httpx.Timeout(60.0, connect=15.0)
 MAX_RESPONSE_BYTES = 50 * 1024 * 1024  # the largest file in the corpus is about 1 MB
 MAX_ROBOTS_BYTES = 512 * 1024

@@ -23,17 +23,80 @@ VALID_ENTRY = """
 """
 
 
+TCMB_ENTRY = """
+  - id: tcmb-ucret-talimat
+    label: Ücret Tebliği Uygulama Talimatı
+    expected_title: Uygulama Talimatı
+    doc_type: talimat
+    origin: tcmb
+    listing_url: https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/
+    link_text: Uygulama Talimatı
+    number: null
+    issuer: TCMB
+    expected_version_date: "2026-01-13"
+"""
+
+
 def _write_sources(tmp_path: Path, body: str) -> Path:
     path = tmp_path / "sources.yaml"
     path.write_text("sources:\n" + body, encoding="utf-8")
     return path
 
 
-def test_repo_sources_file_lists_fifteen_unique_documents() -> None:
+def test_repo_sources_file_lists_the_sixteen_curated_documents() -> None:
     specs = load_sources(REPO_SOURCES)
 
-    assert len(specs) == 15
-    assert len({spec.id for spec in specs}) == 15
+    assert len(specs) == 16
+    assert len({spec.id for spec in specs}) == 16
+    assert sum(spec.origin == "tcmb" for spec in specs) == 1
+
+
+def test_tcmb_source_uses_its_listing_page_and_version_date(tmp_path: Path) -> None:
+    (spec,) = load_sources(_write_sources(tmp_path, TCMB_ENTRY))
+
+    assert spec.page_url.startswith("https://www.tcmb.gov.tr/wps/wcm/connect/TR/")
+    assert spec.expected_version_date == date(2026, 1, 13)
+    assert spec.mevzuat_no is None
+
+
+@pytest.mark.parametrize(
+    ("extra_line", "message"),
+    [
+        ("    mevzuat_no: 1\n", "mevzuat"),
+        ('    expected_rg_number: "1"\n', "expected_rg"),
+    ],
+)
+def test_tcmb_source_rejects_mevzuat_fields(tmp_path: Path, extra_line: str, message: str) -> None:
+    with pytest.raises(SourcesError, match=message):
+        load_sources(_write_sources(tmp_path, TCMB_ENTRY + extra_line))
+
+
+def test_tcmb_listing_must_be_on_the_tcmb_host(tmp_path: Path) -> None:
+    body = TCMB_ENTRY.replace("https://www.tcmb.gov.tr", "https://evil.example")
+
+    with pytest.raises(SourcesError, match=r"www\.tcmb\.gov\.tr"):
+        load_sources(_write_sources(tmp_path, body))
+
+
+def test_tcmb_source_needs_a_link_text(tmp_path: Path) -> None:
+    body = TCMB_ENTRY.replace("    link_text: Uygulama Talimatı\n", "")
+
+    with pytest.raises(SourcesError, match="link_text"):
+        load_sources(_write_sources(tmp_path, body))
+
+
+def test_mevzuat_source_needs_mevzuat_numbers(tmp_path: Path) -> None:
+    body = VALID_ENTRY.replace("    mevzuat_no: 6502\n", "")
+
+    with pytest.raises(SourcesError, match="mevzuat_no"):
+        load_sources(_write_sources(tmp_path, body))
+
+
+def test_talimat_must_come_from_tcmb(tmp_path: Path) -> None:
+    body = VALID_ENTRY.replace("doc_type: kanun", "doc_type: talimat")
+
+    with pytest.raises(SourcesError, match="tcmb"):
+        load_sources(_write_sources(tmp_path, body))
 
 
 def test_page_url_uses_the_verified_mevzuat_pattern() -> None:

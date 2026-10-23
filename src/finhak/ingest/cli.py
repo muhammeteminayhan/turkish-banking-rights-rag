@@ -18,13 +18,12 @@ from pathlib import Path
 
 from finhak.ingest.fetch import (
     PAGE_NAME,
-    TEXT_NAME,
     CorruptFetchLog,
     FetchLog,
     fetch_source,
+    linked_files,
     read_fetch_log,
     sha256_hex,
-    source_file_name,
 )
 from finhak.ingest.http import FetchError, PoliteClient, RateLimiter
 from finhak.ingest.manifest import (
@@ -34,7 +33,7 @@ from finhak.ingest.manifest import (
     write_json_schema,
     write_manifest,
 )
-from finhak.ingest.scrape import ScrapeError, decode_html, parse_page
+from finhak.ingest.scrape import ScrapeError
 from finhak.ingest.sources import SourcesError, SourceSpec, load_sources
 
 logger = logging.getLogger("finhak.fetch_sources")
@@ -124,9 +123,7 @@ def _report_plan(specs: tuple[SourceSpec, ...], raw_dir: Path, refresh: bool) ->
         if not _is_cached(doc_dir, log, PAGE_NAME):
             logger.info("%s: would fetch the page %s, then its files", spec.id, spec.page_url)
             continue
-        page_bytes = (doc_dir / PAGE_NAME).read_bytes()
-        page = parse_page(decode_html(page_bytes, spec.page_url), spec.page_url)
-        wanted = [TEXT_NAME, *(source_file_name(url) for url in page.file_urls)]
+        wanted = linked_files(spec, (doc_dir / PAGE_NAME).read_bytes())
         rejected = [name for name in wanted if name in log.rejected]
         missing = [
             name for name in wanted if name not in rejected and not _is_cached(doc_dir, log, name)
