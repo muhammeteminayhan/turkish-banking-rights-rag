@@ -1,0 +1,192 @@
+# Hand-curated list of the documents in the corpus.
+# Read by finhak.ingest.sources.load_sources (scripts/fetch_sources.py).
+#
+# mevzuat_no / mevzuat_tur come from mevzuat.gov.tr page URLs:
+#   https://www.mevzuat.gov.tr/mevzuat?MevzuatNo={mevzuat_no}&MevzuatTur={mevzuat_tur}&MevzuatTertip=5
+#   mevzuat_tur: 1 = Kanun, 7 = Kurum ve Kuruluş Yönetmeliği, 9 = Tebliğ
+#
+# expected_* values were read from those pages on 2026-10-23; for 19798, 10735 and 38873
+# the RG date/number were also cross-checked against the Resmî Gazete daily index
+# (resmigazete.gov.tr/eskiler/YYYY/MM/YYYYMMDD.htm). A null value means "not verified":
+# the manifest then records whatever the official page says.
+# The manifest build fails loudly if a page disagrees with a non-null expected value.
+#
+# number: the official number of the act ("6502", "2020/7"); yönetmelikler have none.
+# issuer: the institution currently responsible for the text.
+# status: declared by us; every entry was listed as a current text on mevzuat.gov.tr.
+
+sources:
+  # --- Kanunlar ---
+  - id: "6502"
+    label: 6502 sayılı Tüketicinin Korunması Hakkında Kanun
+    expected_title: Tüketicinin Korunması Hakkında Kanun
+    doc_type: kanun
+    mevzuat_no: 6502
+    mevzuat_tur: 1
+    number: "6502"
+    issuer: TBMM
+    expected_rg_date: "2013-11-28"
+    expected_rg_number: "28835"
+
+  - id: "5411"
+    label: 5411 sayılı Bankacılık Kanunu
+    expected_title: Bankacılık Kanunu
+    doc_type: kanun
+    mevzuat_no: 5411
+    mevzuat_tur: 1
+    number: "5411"
+    issuer: TBMM
+    expected_rg_date: "2005-11-01"
+    expected_rg_number: "25983"
+
+  - id: "5464"
+    label: 5464 sayılı Banka Kartları ve Kredi Kartları Kanunu
+    expected_title: Banka Kartları ve Kredi Kartları Kanunu
+    doc_type: kanun
+    mevzuat_no: 5464
+    mevzuat_tur: 1
+    number: "5464"
+    issuer: TBMM
+    expected_rg_date: "2006-03-01"
+    expected_rg_number: "26095"
+
+  - id: "6493"
+    label: 6493 sayılı Ödeme Hizmetleri ve Elektronik Para Kuruluşları Kanunu
+    expected_title: >-
+      Ödeme ve Menkul Kıymet Mutabakat Sistemleri, Ödeme Hizmetleri ve Elektronik Para
+      Kuruluşları Hakkında Kanun
+    doc_type: kanun
+    mevzuat_no: 6493
+    mevzuat_tur: 1
+    number: "6493"
+    issuer: TBMM
+    expected_rg_date: "2013-06-27"
+    expected_rg_number: "28690"
+
+  - id: "6698"
+    label: 6698 sayılı Kişisel Verilerin Korunması Kanunu
+    expected_title: Kişisel Verilerin Korunması Kanunu
+    doc_type: kanun
+    mevzuat_no: 6698
+    mevzuat_tur: 1
+    number: "6698"
+    issuer: TBMM
+    expected_rg_date: "2016-04-07"
+    expected_rg_number: "29677"
+
+  # --- Tebliğ ---
+  # Replaces the BDDK regulation of 03.10.2014 (RG 29138), repealed in RG 07.03.2020/31061.
+  - id: tcmb-ucret-teblig
+    label: Finansal Tüketicilerden Alınacak Ücretler Tebliği (2020/7)
+    expected_title: Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğ
+    doc_type: teblig
+    mevzuat_no: 34343
+    mevzuat_tur: 9
+    number: "2020/7"
+    issuer: TCMB
+    expected_rg_date: "2020-03-07"
+    expected_rg_number: "31061"
+
+  # --- Yönetmelikler ---
+  - id: tuketici-kredisi-yon
+    label: Tüketici Kredisi Sözleşmeleri Yönetmeliği
+    expected_title: Tüketici Kredisi Sözleşmeleri Yönetmeliği
+    doc_type: yonetmelik
+    mevzuat_no: 20767
+    mevzuat_tur: 7
+    number: null
+    issuer: Ticaret Bakanlığı
+    expected_rg_date: "2015-05-22"
+    expected_rg_number: "29363"
+
+  - id: kart-yon
+    label: Banka Kartları ve Kredi Kartları Hakkında Yönetmelik
+    expected_title: Banka Kartları ve Kredi Kartları Hakkında Yönetmelik
+    doc_type: yonetmelik
+    mevzuat_no: 11180
+    mevzuat_tur: 7
+    number: null
+    issuer: BDDK
+    expected_rg_date: "2007-03-10"
+    expected_rg_number: "26458"
+
+  - id: konut-finansmani-yon
+    label: Konut Finansmanı Sözleşmeleri Yönetmeliği
+    expected_title: Konut Finansmanı Sözleşmeleri Yönetmeliği
+    doc_type: yonetmelik
+    mevzuat_no: 20793
+    mevzuat_tur: 7
+    number: null
+    issuer: Ticaret Bakanlığı
+    expected_rg_date: "2015-05-28"
+    expected_rg_number: "29369"
+
+  - id: odeme-hizmetleri-yon
+    label: Ödeme Hizmetleri ve Elektronik Para İhracı Yönetmeliği
+    expected_title: >-
+      Ödeme Hizmetleri ve Elektronik Para İhracı ile Ödeme Hizmeti Sağlayıcıları
+      Hakkında Yönetmelik
+    doc_type: yonetmelik
+    mevzuat_no: 39080
+    mevzuat_tur: 7
+    number: null
+    issuer: TCMB
+    expected_rg_date: "2021-12-01"
+    expected_rg_number: "31676"
+
+  - id: hakem-heyetleri-yon
+    label: Tüketici Hakem Heyetleri Yönetmeliği
+    expected_title: Tüketici Hakem Heyetleri Yönetmeliği
+    doc_type: yonetmelik
+    mevzuat_no: 39730
+    mevzuat_tur: 7
+    number: null
+    issuer: Ticaret Bakanlığı
+    expected_rg_date: "2022-09-21"
+    expected_rg_number: "31960"
+
+  - id: mesafeli-finansal-yon
+    label: Finansal Hizmetlere İlişkin Mesafeli Sözleşmeler Yönetmeliği
+    expected_title: Finansal Hizmetlere İlişkin Mesafeli Sözleşmeler Yönetmeliği
+    doc_type: yonetmelik
+    mevzuat_no: 20495
+    mevzuat_tur: 7
+    number: null
+    issuer: Ticaret Bakanlığı
+    expected_rg_date: "2015-01-31"
+    expected_rg_number: "29253"
+
+  - id: haksiz-sartlar-yon
+    label: Tüketici Sözleşmelerindeki Haksız Şartlar Hakkında Yönetmelik
+    expected_title: Tüketici Sözleşmelerindeki Haksız Şartlar Hakkında Yönetmelik
+    doc_type: yonetmelik
+    mevzuat_no: 19798
+    mevzuat_tur: 7
+    number: null
+    issuer: Ticaret Bakanlığı
+    expected_rg_date: "2014-06-17"
+    expected_rg_number: "29033"
+
+  - id: mevduat-yon
+    label: Mevduat ve Katılım Fonunun Kabulü, Çekilmesi ve Zamanaşımı Yönetmeliği
+    expected_title: >-
+      Mevduat ve Katılım Fonunun Kabulüne, Çekilmesine ve Zamanaşımına Uğrayan Mevduat,
+      Katılım Fonu, Emanet ve Alacaklara İlişkin Usul ve Esaslar Hakkında Yönetmelik
+    doc_type: yonetmelik
+    mevzuat_no: 10735
+    mevzuat_tur: 7
+    number: null
+    issuer: BDDK
+    expected_rg_date: "2006-11-01"
+    expected_rg_number: "26333"
+
+  - id: erisilebilirlik-yon
+    label: Bankacılık Hizmetlerinin Erişilebilirliğine Dair Yönetmelik
+    expected_title: Bankacılık Hizmetlerinin Erişilebilirliğine Dair Yönetmelik
+    doc_type: yonetmelik
+    mevzuat_no: 38873
+    mevzuat_tur: 7
+    number: null
+    issuer: BDDK
+    expected_rg_date: "2016-06-18"
+    expected_rg_number: "29746"

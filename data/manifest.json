@@ -1,0 +1,793 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "6502",
+      "label": "6502 sayılı Tüketicinin Korunması Hakkında Kanun",
+      "title": "TÜKETİCİNİN KORUNMASI HAKKINDA KANUN",
+      "doc_type": "kanun",
+      "number": "6502",
+      "mevzuat_no": 6502,
+      "mevzuat_tur": 1,
+      "issuer": "TBMM",
+      "rg_date": "2013-11-28",
+      "rg_number": "28835",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6502&MevzuatTur=1&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "6502/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6502&MevzuatTur=1&MevzuatTertip=5",
+          "sha256": "5085205acadb6f971a759940c1efaf2e166bced39f8e21ddba0144674a3820c8",
+          "bytes": 71619,
+          "fetched_at": "2026-10-23T14:15:38.024396Z"
+        },
+        {
+          "format": "html_text",
+          "path": "6502/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6502&MevzuatTertip=5",
+          "sha256": "88c932de3cc3a9081102d658c059082c984166350e0eaa1cf41be982bdb2f641",
+          "bytes": 408294,
+          "fetched_at": "2026-10-23T14:15:39.096814Z"
+        },
+        {
+          "format": "doc",
+          "path": "6502/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.doc",
+          "sha256": "6eae0d9b4b21e2072e0e42ae29d1dcaff4f8e744033cec5decdf0680585be126",
+          "bytes": 441344,
+          "fetched_at": "2026-10-23T14:15:40.189159Z"
+        },
+        {
+          "format": "pdf",
+          "path": "6502/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "sha256": "943f70aa212af092d04aa9d1035f756ff513261042adb6932a98fa3a92cd2c46",
+          "bytes": 480658,
+          "fetched_at": "2026-10-23T14:15:41.290440Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2026-06-24",
+        "kind": "law",
+        "reference": "7587/24"
+      },
+      "amendment_note_count": 50,
+      "status": "in_force"
+    },
+    {
+      "id": "5411",
+      "label": "5411 sayılı Bankacılık Kanunu",
+      "title": "BANKACILIK KANUNU",
+      "doc_type": "kanun",
+      "number": "5411",
+      "mevzuat_no": 5411,
+      "mevzuat_tur": 1,
+      "issuer": "TBMM",
+      "rg_date": "2005-11-01",
+      "rg_number": "25983",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5411&MevzuatTur=1&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "5411/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5411&MevzuatTur=1&MevzuatTertip=5",
+          "sha256": "875450c61a90969bd32c9c60836f787a8955de198c5d864b1dd524454c89a3ec",
+          "bytes": 71619,
+          "fetched_at": "2026-10-23T14:15:42.398395Z"
+        },
+        {
+          "format": "html_text",
+          "path": "5411/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=5411&MevzuatTertip=5",
+          "sha256": "449db9cb2f94d88d9e6702555b0a00661bf1381f75e9551d38f35c6766a20047",
+          "bytes": 965294,
+          "fetched_at": "2026-10-23T14:15:43.563293Z"
+        },
+        {
+          "format": "doc",
+          "path": "5411/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.5411.doc",
+          "sha256": "d55dbdc16ed22a636b154dde4eb4c10c30196782c758aa6627c86c00bc6e9c3c",
+          "bytes": 1041408,
+          "fetched_at": "2026-10-23T14:15:44.661554Z"
+        },
+        {
+          "format": "pdf",
+          "path": "5411/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.5411.pdf",
+          "sha256": "f2a95d806f9f8eeac2bbaf5260e1eee4a249c894fdd202515d95f08dbede67fd",
+          "bytes": 893561,
+          "fetched_at": "2026-10-23T14:15:45.799293Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2023-12-27",
+        "kind": "law",
+        "reference": "7491/52"
+      },
+      "amendment_note_count": 97,
+      "status": "in_force"
+    },
+    {
+      "id": "5464",
+      "label": "5464 sayılı Banka Kartları ve Kredi Kartları Kanunu",
+      "title": "BANKA KARTLARI VE KREDİ KARTLARI KANUNU",
+      "doc_type": "kanun",
+      "number": "5464",
+      "mevzuat_no": 5464,
+      "mevzuat_tur": 1,
+      "issuer": "TBMM",
+      "rg_date": "2006-03-01",
+      "rg_number": "26095",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5464&MevzuatTur=1&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "5464/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5464&MevzuatTur=1&MevzuatTertip=5",
+          "sha256": "3c25dc6cc7acccf22adc58e6f012e75e95d5ec3866a05d30c04190a214dd41f0",
+          "bytes": 71620,
+          "fetched_at": "2026-10-23T14:15:46.774429Z"
+        },
+        {
+          "format": "html_text",
+          "path": "5464/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=5464&MevzuatTertip=5",
+          "sha256": "1a1ffe53cad28d1b33535e16bfc87c1e278d28c71f432b68fe4fe48eb833e100",
+          "bytes": 133696,
+          "fetched_at": "2026-10-23T14:15:47.880560Z"
+        },
+        {
+          "format": "docx",
+          "path": "5464/source.docx",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.5464.docx",
+          "sha256": "a26f8154746013cade58794a3bc3026c3c3cc5f9eba7fbbd9c595b490c3d472d",
+          "bytes": 51351,
+          "fetched_at": "2026-10-23T14:15:48.963343Z"
+        },
+        {
+          "format": "pdf",
+          "path": "5464/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.5464.pdf",
+          "sha256": "3a682fdc406fed65808dbb40334346065bd5f17e81bddf6078d3251d83d984ed",
+          "bytes": 444107,
+          "fetched_at": "2026-10-23T14:15:50.117992Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2020-06-18",
+        "kind": "law",
+        "reference": "7247/7"
+      },
+      "amendment_note_count": 7,
+      "status": "in_force"
+    },
+    {
+      "id": "6493",
+      "label": "6493 sayılı Ödeme Hizmetleri ve Elektronik Para Kuruluşları Kanunu",
+      "title": "ÖDEME VE MENKUL KIYMET MUTABAKAT SİSTEMLERİ, ÖDEME HİZMETLERİ VE ELEKTRONİK PARA KURULUŞLARI HAKKINDA KANUN",
+      "doc_type": "kanun",
+      "number": "6493",
+      "mevzuat_no": 6493,
+      "mevzuat_tur": 1,
+      "issuer": "TBMM",
+      "rg_date": "2013-06-27",
+      "rg_number": "28690",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6493&MevzuatTur=1&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "6493/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6493&MevzuatTur=1&MevzuatTertip=5",
+          "sha256": "a89fffa9fc933dee629de2915e51d5a8f5a03e89919081b5466dba56295128d6",
+          "bytes": 71619,
+          "fetched_at": "2026-10-23T14:15:51.183062Z"
+        },
+        {
+          "format": "html_text",
+          "path": "6493/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6493&MevzuatTertip=5",
+          "sha256": "b25983c8859d2843834cbad6de32e31c711560767f940cbaf0f123e2cbe534ee",
+          "bytes": 241086,
+          "fetched_at": "2026-10-23T14:15:52.302314Z"
+        },
+        {
+          "format": "doc",
+          "path": "6493/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6493.doc",
+          "sha256": "5a3d408e34d90877fd733fb7aabba49f4ade6786b198eac131e25362dd4b21f5",
+          "bytes": 285184,
+          "fetched_at": "2026-10-23T14:15:53.394266Z"
+        },
+        {
+          "format": "pdf",
+          "path": "6493/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6493.pdf",
+          "sha256": "aa13ef78e48e1dcb6aed9000871c495b77d31c06c75b93a0d4c1b96ab2750340",
+          "bytes": 385447,
+          "fetched_at": "2026-10-23T14:15:54.524765Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2020-06-18",
+        "kind": "law",
+        "reference": "7247/16"
+      },
+      "amendment_note_count": 31,
+      "status": "in_force"
+    },
+    {
+      "id": "6698",
+      "label": "6698 sayılı Kişisel Verilerin Korunması Kanunu",
+      "title": "KİŞİSEL VERİLERİN KORUNMASI KANUNU",
+      "doc_type": "kanun",
+      "number": "6698",
+      "mevzuat_no": 6698,
+      "mevzuat_tur": 1,
+      "issuer": "TBMM",
+      "rg_date": "2016-04-07",
+      "rg_number": "29677",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6698&MevzuatTur=1&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "6698/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6698&MevzuatTur=1&MevzuatTertip=5",
+          "sha256": "0b45a4d0578a26bec6ccdd3055fbea0418feb87ce1e6abaf4e29cbb250c5901b",
+          "bytes": 71619,
+          "fetched_at": "2026-10-23T14:15:55.614207Z"
+        },
+        {
+          "format": "html_text",
+          "path": "6698/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=1&MevzuatNo=6698&MevzuatTertip=5",
+          "sha256": "83115349f89e9f99529fcbf7390f30ffbd6161d34ffbddfb4168935ad5c23ba6",
+          "bytes": 207245,
+          "fetched_at": "2026-10-23T14:15:56.709379Z"
+        },
+        {
+          "format": "doc",
+          "path": "6698/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6698.doc",
+          "sha256": "a254a34fcfdc9f5e9388f5c4919f8ec64b32224fc82842e8b65f009e83fbb163",
+          "bytes": 260608,
+          "fetched_at": "2026-10-23T14:15:57.801761Z"
+        },
+        {
+          "format": "pdf",
+          "path": "6698/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6698.pdf",
+          "sha256": "1ad27253b0068d4c3d991b92b68c6bc1104439430160f4350a3f04fbb211f2b5",
+          "bytes": 465042,
+          "fetched_at": "2026-10-23T14:15:59.098921Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2024-03-02",
+        "kind": "law",
+        "reference": "7499/33"
+      },
+      "amendment_note_count": 10,
+      "status": "in_force"
+    },
+    {
+      "id": "tcmb-ucret-teblig",
+      "label": "Finansal Tüketicilerden Alınacak Ücretler Tebliği (2020/7)",
+      "title": "FİNANSAL TÜKETİCİLERDEN ALINACAK ÜCRETLERE İLİŞKİN USÛL VE ESASLAR HAKKINDA TEBLİĞ",
+      "doc_type": "teblig",
+      "number": "2020/7",
+      "mevzuat_no": 34343,
+      "mevzuat_tur": 9,
+      "issuer": "TCMB",
+      "rg_date": "2020-03-07",
+      "rg_number": "31061",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=34343&MevzuatTur=9&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "tcmb-ucret-teblig/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=34343&MevzuatTur=9&MevzuatTertip=5",
+          "sha256": "84ca2df7e25bf7556a1e82c3bffe808e2a47ec6ab0b6cc8772e5c751af334089",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:15:59.993553Z"
+        },
+        {
+          "format": "html_text",
+          "path": "tcmb-ucret-teblig/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=9&MevzuatNo=34343&MevzuatTertip=5",
+          "sha256": "5df990b2eca434ca61fb15e4ec62fdb40862a553d898d06a59f7cafc5cf2bfdb",
+          "bytes": 62565,
+          "fetched_at": "2026-10-23T14:16:01.076587Z"
+        },
+        {
+          "format": "doc",
+          "path": "tcmb-ucret-teblig/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/9.5.34343.doc",
+          "sha256": "665815983046b1b3aa41ac40fbffbff9531054ecb8b841a9e22f9b570eb1d27b",
+          "bytes": 99328,
+          "fetched_at": "2026-10-23T14:16:02.173678Z"
+        },
+        {
+          "format": "pdf",
+          "path": "tcmb-ucret-teblig/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/9.5.34343.pdf",
+          "sha256": "656b4950e77423e626eae34092dbf194b67b49c5f472ea0e5a43c0fa3d7d2ae7",
+          "bytes": 636748,
+          "fetched_at": "2026-10-23T14:16:03.457534Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2023-12-22",
+        "kind": "rg",
+        "reference": "RG-22/12/2023-32407"
+      },
+      "amendment_note_count": 11,
+      "status": "in_force"
+    },
+    {
+      "id": "tuketici-kredisi-yon",
+      "label": "Tüketici Kredisi Sözleşmeleri Yönetmeliği",
+      "title": "TÜKETİCİ KREDİSİ SÖZLEŞMELERİ YÖNETMELİĞİ",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 20767,
+      "mevzuat_tur": 7,
+      "issuer": "Ticaret Bakanlığı",
+      "rg_date": "2015-05-22",
+      "rg_number": "29363",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20767&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "tuketici-kredisi-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20767&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "68c83e89719b17b72604ecc1c1b0427905e97948098ea00a0685302ccdce6fa0",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:16:04.405752Z"
+        },
+        {
+          "format": "html_text",
+          "path": "tuketici-kredisi-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20767&MevzuatTertip=5",
+          "sha256": "8182f2a7b6e8452f4cb216111b36b41b78f5a89e50b895f9b069ff8f3a42adca",
+          "bytes": 85338,
+          "fetched_at": "2026-10-23T14:16:05.483318Z"
+        },
+        {
+          "format": "doc",
+          "path": "tuketici-kredisi-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.20767.doc",
+          "sha256": "e6581c3c2f7bb9dd7e7a07b1c4d1c45fd3038478ff15e55f9fe2835b835fe4e5",
+          "bytes": 127488,
+          "fetched_at": "2026-10-23T14:16:06.569702Z"
+        },
+        {
+          "format": "pdf",
+          "path": "tuketici-kredisi-yon/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.20767.pdf",
+          "sha256": "0dd78bde231a85e3c81853a093949f77aeab4459cd78b6ede6363778576118e3",
+          "bytes": 256757,
+          "fetched_at": "2026-10-23T14:16:07.719468Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2024-12-31",
+        "kind": "rg",
+        "reference": "RG-31/12/2024-32769"
+      },
+      "amendment_note_count": 20,
+      "status": "in_force"
+    },
+    {
+      "id": "kart-yon",
+      "label": "Banka Kartları ve Kredi Kartları Hakkında Yönetmelik",
+      "title": "BANKA KARTLARI VE KREDİ KARTLARI HAKKINDA YÖNETMELİK",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 11180,
+      "mevzuat_tur": 7,
+      "issuer": "BDDK",
+      "rg_date": "2007-03-10",
+      "rg_number": "26458",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=11180&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "kart-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=11180&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "71a13e1689130faf7b3519ae1ccce747f0df469c8485d828b5fe0c8796ef3877",
+          "bytes": 71700,
+          "fetched_at": "2026-10-23T14:16:08.833580Z"
+        },
+        {
+          "format": "html_text",
+          "path": "kart-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=11180&MevzuatTertip=5",
+          "sha256": "f14f41699fa483f240469f57d9f4d8cbcd8d331bafe896b2e47d504cc209cb11",
+          "bytes": 484408,
+          "fetched_at": "2026-10-23T14:16:09.988313Z"
+        },
+        {
+          "format": "doc_html",
+          "path": "kart-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.11180.doc",
+          "sha256": "ff34a70387b867629bb8f2860e37562b2b940bd356a592afc6fd74d56c530834",
+          "bytes": 950182,
+          "fetched_at": "2026-10-23T14:16:11.122944Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2020-09-25",
+        "kind": "rg",
+        "reference": "RG-25/9/2020-31255"
+      },
+      "amendment_note_count": 71,
+      "status": "in_force"
+    },
+    {
+      "id": "konut-finansmani-yon",
+      "label": "Konut Finansmanı Sözleşmeleri Yönetmeliği",
+      "title": "KONUT FİNANSMANI SÖZLEŞMELERİ YÖNETMELİĞİ",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 20793,
+      "mevzuat_tur": 7,
+      "issuer": "Ticaret Bakanlığı",
+      "rg_date": "2015-05-28",
+      "rg_number": "29369",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20793&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "konut-finansmani-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20793&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "e667ffc7cb255ad743655727e94cd92f84ac9191e58ef7e54ea9207d92d8a1d7",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:16:12.092123Z"
+        },
+        {
+          "format": "html_text",
+          "path": "konut-finansmani-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20793&MevzuatTertip=5",
+          "sha256": "34cde06d42a80c31a24bd96e90f4d066a17a92cef5129312b4f2cf621fde2226",
+          "bytes": 64957,
+          "fetched_at": "2026-10-23T14:16:13.174518Z"
+        },
+        {
+          "format": "doc",
+          "path": "konut-finansmani-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.20793.doc",
+          "sha256": "bcd0424217fc09a3bdd46ab7b86d81a628a33a8562f7832178cf4c730c1378ff",
+          "bytes": 103424,
+          "fetched_at": "2026-10-23T14:16:14.274745Z"
+        },
+        {
+          "format": "pdf",
+          "path": "konut-finansmani-yon/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.20793.pdf",
+          "sha256": "012c1464714f2574a6d622d33dac455bfc3c9ad6dc1c910962670a808c6409ed",
+          "bytes": 262648,
+          "fetched_at": "2026-10-23T14:16:15.385928Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2024-12-31",
+        "kind": "rg",
+        "reference": "RG-31/12/2024-32769"
+      },
+      "amendment_note_count": 17,
+      "status": "in_force"
+    },
+    {
+      "id": "odeme-hizmetleri-yon",
+      "label": "Ödeme Hizmetleri ve Elektronik Para İhracı Yönetmeliği",
+      "title": "ÖDEME HİZMETLERİ VE ELEKTRONİK PARA İHRACI İLE ÖDEME HİZMETİ SAĞLAYICILARI HAKKINDA YÖNETMELİK",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 39080,
+      "mevzuat_tur": 7,
+      "issuer": "TCMB",
+      "rg_date": "2021-12-01",
+      "rg_number": "31676",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=39080&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "odeme-hizmetleri-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=39080&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "5d3cf80444a3043498e9064590dd599f65101619ce4bd867d042fa336eec27dc",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:16:16.507019Z"
+        },
+        {
+          "format": "html_text",
+          "path": "odeme-hizmetleri-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=39080&MevzuatTertip=5",
+          "sha256": "93d8da8cb17c0b65afd0e83936eca8b5a58c63fe63482a418ba857e99fc64613",
+          "bytes": 453702,
+          "fetched_at": "2026-10-23T14:16:17.656434Z"
+        },
+        {
+          "format": "doc",
+          "path": "odeme-hizmetleri-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.39080.doc",
+          "sha256": "825b1e0618b4feb737ee56ed1ea90be802945a6b0a8d2dfb8db0620f5e328c7b",
+          "bytes": 602624,
+          "fetched_at": "2026-10-23T14:16:18.754240Z"
+        },
+        {
+          "format": "pdf",
+          "path": "odeme-hizmetleri-yon/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.39080.pdf",
+          "sha256": "804a56f6cbf6324dd4664352aac99aa9c8eb29120f69cffcb7da3fbb3acbbf4e",
+          "bytes": 1082595,
+          "fetched_at": "2026-10-23T14:16:20.007651Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2026-09-04",
+        "kind": "rg",
+        "reference": "RG-4/9/2026-33360"
+      },
+      "amendment_note_count": 103,
+      "status": "in_force"
+    },
+    {
+      "id": "hakem-heyetleri-yon",
+      "label": "Tüketici Hakem Heyetleri Yönetmeliği",
+      "title": "TÜKETİCİ HAKEM HEYETLERİ YÖNETMELİĞİ",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 39730,
+      "mevzuat_tur": 7,
+      "issuer": "Ticaret Bakanlığı",
+      "rg_date": "2022-09-21",
+      "rg_number": "31960",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=39730&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "hakem-heyetleri-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=39730&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "65bfe87327a174740c1c567e70815cee23cddb5dc6d4c2a29bc34858f4759d87",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:16:20.880410Z"
+        },
+        {
+          "format": "html_text",
+          "path": "hakem-heyetleri-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=39730&MevzuatTertip=5",
+          "sha256": "402841c44522d05625ddc8850f06b1235ddfaabc04fc9b6221c6e687eba40270",
+          "bytes": 69613,
+          "fetched_at": "2026-10-23T14:16:21.987986Z"
+        },
+        {
+          "format": "pdf",
+          "path": "hakem-heyetleri-yon/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.39730.pdf",
+          "sha256": "046559424d1c8710685f62d32b04224e037193cf267e61cfc6163de512ba8098",
+          "bytes": 249043,
+          "fetched_at": "2026-10-23T14:16:24.194968Z"
+        }
+      ],
+      "rejected_files": [
+        {
+          "name": "source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.39730.doc",
+          "reason": "source.doc: content is not a doc file",
+          "fetched_at": "2026-10-23T14:16:23.084855Z"
+        }
+      ],
+      "last_amendment": null,
+      "amendment_note_count": 0,
+      "status": "in_force"
+    },
+    {
+      "id": "mesafeli-finansal-yon",
+      "label": "Finansal Hizmetlere İlişkin Mesafeli Sözleşmeler Yönetmeliği",
+      "title": "FİNANSAL HİZMETLERE İLİŞKİN MESAFELİ SÖZLEŞMELER YÖNETMELİĞİ",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 20495,
+      "mevzuat_tur": 7,
+      "issuer": "Ticaret Bakanlığı",
+      "rg_date": "2015-01-31",
+      "rg_number": "29253",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20495&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "mesafeli-finansal-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=20495&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "cdc5ce460412777a431db6bf80431b6fe8c7a0029472f41bff4cf445a19326d3",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:16:25.313057Z"
+        },
+        {
+          "format": "html_text",
+          "path": "mesafeli-finansal-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=20495&MevzuatTertip=5",
+          "sha256": "2e6cfcb610ec52800dc9b4b27d85f80118bc817b3bc8984643abb9f3ca144a60",
+          "bytes": 44391,
+          "fetched_at": "2026-10-23T14:16:26.378547Z"
+        },
+        {
+          "format": "doc",
+          "path": "mesafeli-finansal-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.20495.doc",
+          "sha256": "b6a7f05c075ce8a5bf6df753641ec0797cd7269e6c8002c9ac94d61cccb83c96",
+          "bytes": 68096,
+          "fetched_at": "2026-10-23T14:16:27.468968Z"
+        },
+        {
+          "format": "pdf",
+          "path": "mesafeli-finansal-yon/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.20495.pdf",
+          "sha256": "9b7c1db71ff09c2d40f2e14f0d13a002e4d2125f65a427b2016514891ba82a5f",
+          "bytes": 170646,
+          "fetched_at": "2026-10-23T14:16:28.591141Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2024-12-31",
+        "kind": "rg",
+        "reference": "RG-31/12/2024-32769"
+      },
+      "amendment_note_count": 7,
+      "status": "in_force"
+    },
+    {
+      "id": "haksiz-sartlar-yon",
+      "label": "Tüketici Sözleşmelerindeki Haksız Şartlar Hakkında Yönetmelik",
+      "title": "TÜKETİCİ SÖZLEŞMELERİNDEKİ HAKSIZ ŞARTLAR HAKKINDA YÖNETMELİK",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 19798,
+      "mevzuat_tur": 7,
+      "issuer": "Ticaret Bakanlığı",
+      "rg_date": "2014-06-17",
+      "rg_number": "29033",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=19798&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "haksiz-sartlar-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=19798&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "cd1dab0b9348750438d31df4f12d514c8c524d32dd22832f6bdfdff58ecb8f24",
+          "bytes": 71700,
+          "fetched_at": "2026-10-23T14:16:29.698364Z"
+        },
+        {
+          "format": "html_text",
+          "path": "haksiz-sartlar-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=19798&MevzuatTertip=5",
+          "sha256": "296771197f0649cd4e91bc2b1f50f782f61b9bd6a7fffb5fdef4ca04b0e92958",
+          "bytes": 24289,
+          "fetched_at": "2026-10-23T14:16:30.774448Z"
+        },
+        {
+          "format": "doc_html",
+          "path": "haksiz-sartlar-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.19798.doc",
+          "sha256": "a35a630cb863efc431327c33ab4e82defdbb1a7a7bbf5b4ac54306f82efa3ba3",
+          "bytes": 38700,
+          "fetched_at": "2026-10-23T14:16:31.858894Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": null,
+      "amendment_note_count": 0,
+      "status": "in_force"
+    },
+    {
+      "id": "mevduat-yon",
+      "label": "Mevduat ve Katılım Fonunun Kabulü, Çekilmesi ve Zamanaşımı Yönetmeliği",
+      "title": "MEVDUAT VE KATILIM FONUNUN KABULÜNE, ÇEKİLMESİNE VE ZAMANAŞIMINA UĞRAYAN MEVDUAT, KATILIM FONU, EMANET VE ALACAKLARA İLİŞKİN USUL VE ESASLAR HAKKINDA YÖNETMELİK",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 10735,
+      "mevzuat_tur": 7,
+      "issuer": "BDDK",
+      "rg_date": "2006-11-01",
+      "rg_number": "26333",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=10735&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "mevduat-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=10735&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "9e09438661ea26c3bf81ac23e9c41c6ae58b420ab4df6fff5bf02bef60df58a6",
+          "bytes": 71644,
+          "fetched_at": "2026-10-23T14:16:33.010255Z"
+        },
+        {
+          "format": "html_text",
+          "path": "mevduat-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=10735&MevzuatTertip=5",
+          "sha256": "67c51499de013e99ee2f56c1c070df9e288ccc4a1874059e0dbfcb8176ca962c",
+          "bytes": 51983,
+          "fetched_at": "2026-10-23T14:16:34.085485Z"
+        },
+        {
+          "format": "doc",
+          "path": "mevduat-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.10735.doc",
+          "sha256": "c288cd11ddd9d08a26fbfd25783d9a84b4935a518398736d7eb4e25454a569ea",
+          "bytes": 93184,
+          "fetched_at": "2026-10-23T14:16:35.177927Z"
+        },
+        {
+          "format": "pdf",
+          "path": "mevduat-yon/source.pdf",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.10735.pdf",
+          "sha256": "93c77bfced2ab7408ccfc666294b3d0f28137e8ba21c3c6bd81e2d9ff83b97fb",
+          "bytes": 627603,
+          "fetched_at": "2026-10-23T14:16:36.433452Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": {
+        "date": "2024-01-23",
+        "kind": "rg",
+        "reference": "RG-23/1/2024-32438"
+      },
+      "amendment_note_count": 23,
+      "status": "in_force"
+    },
+    {
+      "id": "erisilebilirlik-yon",
+      "label": "Bankacılık Hizmetlerinin Erişilebilirliğine Dair Yönetmelik",
+      "title": "BANKACILIK HİZMETLERİNİN ERİŞİLEBİLİRLİĞİNE DAİR YÖNETMELİK",
+      "doc_type": "yonetmelik",
+      "number": null,
+      "mevzuat_no": 38873,
+      "mevzuat_tur": 7,
+      "issuer": "BDDK",
+      "rg_date": "2016-06-18",
+      "rg_number": "29746",
+      "source_page_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=38873&MevzuatTur=7&MevzuatTertip=5",
+      "files": [
+        {
+          "format": "html_page",
+          "path": "erisilebilirlik-yon/page.html",
+          "url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=38873&MevzuatTur=7&MevzuatTertip=5",
+          "sha256": "62251e6a75500c1d934255f1cae9c5e7cfee8d115f54b660d760612fd509752a",
+          "bytes": 71700,
+          "fetched_at": "2026-10-23T14:16:37.403849Z"
+        },
+        {
+          "format": "html_text",
+          "path": "erisilebilirlik-yon/text.html",
+          "url": "https://www.mevzuat.gov.tr/anasayfa/MevzuatFihristDetayIframe?MevzuatTur=7&MevzuatNo=38873&MevzuatTertip=5",
+          "sha256": "e5bc43efaa8b0124560f3da8d5372a655cdc3f3db1357f9de5b2b4a6092d9bf5",
+          "bytes": 35094,
+          "fetched_at": "2026-10-23T14:16:38.473347Z"
+        },
+        {
+          "format": "doc_html",
+          "path": "erisilebilirlik-yon/source.doc",
+          "url": "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.38873.doc",
+          "sha256": "29de1b67219b0e006697e5d6751df3c83bff82d7fbc7ce7aac5294ca9a5a4443",
+          "bytes": 60116,
+          "fetched_at": "2026-10-23T14:16:39.558562Z"
+        }
+      ],
+      "rejected_files": [],
+      "last_amendment": null,
+      "amendment_note_count": 0,
+      "status": "in_force"
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+{
+  "$defs": {
+    "FileEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "enum": [
+            "html_page",
+            "html_text",
+            "doc",
+            "doc_html",
+            "docx",
+            "pdf"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "path": {
+          "description": "relative to data/raw",
+          "pattern": "^[a-z0-9][a-z0-9-]*/[a-z_]+\\.[a-z]+$",
+          "title": "Path",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "bytes": {
+          "minimum": 0,
+          "title": "Bytes",
+          "type": "integer"
+        },
+        "fetched_at": {
+          "format": "date-time",
+          "title": "Fetched At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "path",
+        "url",
+        "sha256",
+        "bytes",
+        "fetched_at"
+      ],
+      "title": "FileEntry",
+      "type": "object"
+    },
+    "LastAmendment": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "description": "for kind 'rg' the Resmî Gazete date of the amending text; for kind 'law' the adoption date of the amending law or decree as printed in the note",
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "rg",
+            "law"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "reference": {
+          "title": "Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date",
+        "kind",
+        "reference"
+      ],
+      "title": "LastAmendment",
+      "type": "object"
+    },
+    "ManifestEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "title": {
+          "description": "as printed at the top of the official consolidated text",
+          "title": "Title",
+          "type": "string"
+        },
+        "doc_type": {
+          "enum": [
+            "kanun",
+            "yonetmelik",
+            "teblig"
+          ],
+          "title": "Doc Type",
+          "type": "string"
+        },
+        "number": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Number"
+        },
+        "mevzuat_no": {
+          "title": "Mevzuat No",
+          "type": "integer"
+        },
+        "mevzuat_tur": {
+          "title": "Mevzuat Tur",
+          "type": "integer"
+        },
+        "issuer": {
+          "title": "Issuer",
+          "type": "string"
+        },
+        "rg_date": {
+          "format": "date",
+          "title": "Rg Date",
+          "type": "string"
+        },
+        "rg_number": {
+          "title": "Rg Number",
+          "type": "string"
+        },
+        "source_page_url": {
+          "title": "Source Page Url",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/FileEntry"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "rejected_files": {
+          "items": {
+            "$ref": "#/$defs/RejectedFile"
+          },
+          "title": "Rejected Files",
+          "type": "array"
+        },
+        "last_amendment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LastAmendment"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "latest dated amendment note found in the consolidated text"
+        },
+        "amendment_note_count": {
+          "title": "Amendment Note Count",
+          "type": "integer"
+        },
+        "status": {
+          "const": "in_force",
+          "description": "declared in sources.yaml: the text was listed as current on mevzuat.gov.tr when collected; not machine-checked",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "title",
+        "doc_type",
+        "number",
+        "mevzuat_no",
+        "mevzuat_tur",
+        "issuer",
+        "rg_date",
+        "rg_number",
+        "source_page_url",
+        "files",
+        "rejected_files",
+        "last_amendment",
+        "amendment_note_count",
+        "status"
+      ],
+      "title": "ManifestEntry",
+      "type": "object"
+    },
+    "RejectedFile": {
+      "additionalProperties": false,
+      "description": "A linked Word/PDF file that was downloaded but refused (bytes did not match).",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "fetched_at": {
+          "format": "date-time",
+          "title": "Fetched At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "reason",
+        "fetched_at"
+      ],
+      "title": "RejectedFile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/ManifestEntry"
+      },
+      "title": "Documents",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "documents"
+  ],
+  "title": "Manifest",
+  "type": "object"
+}
