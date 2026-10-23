@@ -1,4 +1,6 @@
 * text=auto eol=lf
+# Fixtures are real downloads; keep their bytes (incl. CRLF) exactly as the site served them.
+tests/fixtures/** -text
 *.pdf binary
 *.doc binary
 *.docx binary
