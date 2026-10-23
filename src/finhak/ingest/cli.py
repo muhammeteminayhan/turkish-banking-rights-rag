@@ -34,7 +34,7 @@ from finhak.ingest.manifest import (
     write_manifest,
 )
 from finhak.ingest.scrape import ScrapeError
-from finhak.ingest.sources import SourcesError, SourceSpec, load_sources
+from finhak.ingest.sources import AnySource, SourcesError, load_sources
 
 logger = logging.getLogger("finhak.fetch_sources")
 
@@ -103,7 +103,7 @@ def _interval_from_env() -> float:
     return interval
 
 
-def _select(specs: tuple[SourceSpec, ...], only: list[str] | None) -> tuple[SourceSpec, ...]:
+def _select(specs: tuple[AnySource, ...], only: list[str] | None) -> tuple[AnySource, ...]:
     if not only:
         return specs
     unknown = set(only) - {spec.id for spec in specs}
@@ -112,7 +112,7 @@ def _select(specs: tuple[SourceSpec, ...], only: list[str] | None) -> tuple[Sour
     return tuple(spec for spec in specs if spec.id in only)
 
 
-def _report_plan(specs: tuple[SourceSpec, ...], raw_dir: Path, refresh: bool) -> None:
+def _report_plan(specs: tuple[AnySource, ...], raw_dir: Path, refresh: bool) -> None:
     """Mirror the cache rules of fetch_source without touching the network."""
     for spec in specs:
         doc_dir = raw_dir / spec.id
@@ -144,7 +144,7 @@ def _is_cached(doc_dir: Path, log: FetchLog, name: str) -> bool:
 
 
 def _fetch_all(
-    specs: tuple[SourceSpec, ...], raw_dir: Path, client: PoliteClient, refresh: bool
+    specs: tuple[AnySource, ...], raw_dir: Path, client: PoliteClient, refresh: bool
 ) -> bool:
     failures: list[str] = []
     with client:
@@ -173,7 +173,7 @@ def _fetch_all(
     return not failures
 
 
-def _write_and_verify_manifest(specs: tuple[SourceSpec, ...], args: argparse.Namespace) -> int:
+def _write_and_verify_manifest(specs: tuple[AnySource, ...], args: argparse.Namespace) -> int:
     try:
         manifest = build_manifest(specs, args.raw_dir)
     except ScrapeError as exc:

@@ -63,6 +63,7 @@ def test_fetch_log_records_url_time_size_and_checksum(tmp_path: Path) -> None:
 
     assert _log(tmp_path)["files"]["source.pdf"] == {
         "url": PDF_URL,
+        "final_url": None,
         "fetched_at": "2026-10-23T13:00:00Z",
         "content_type": None,
         "bytes": len(PDF_BYTES),
@@ -110,6 +111,22 @@ def test_cached_page_for_a_different_url_is_not_reused(tmp_path: Path) -> None:
 
     assert outcome.downloaded[0] == "page.html"
     assert "/mevzuat" in server.paths
+
+
+def test_redirected_file_is_cached_under_the_url_that_was_requested(tmp_path: Path) -> None:
+    moved = {
+        PDF_PATH: httpx.Response(302, headers={"location": "/MevzuatMetin/moved.pdf"}),
+        "/MevzuatMetin/moved.pdf": httpx.Response(200, content=PDF_BYTES),
+    }
+    _fetch(tmp_path, **moved)
+
+    outcome, server = _fetch(tmp_path)
+
+    record = read_fetch_log(tmp_path / "6502").files["source.pdf"]
+    assert record.url == PDF_URL
+    assert record.final_url == "https://www.mevzuat.gov.tr/MevzuatMetin/moved.pdf"
+    assert server.paths == []
+    assert "source.pdf" in outcome.cached
 
 
 def test_no_temporary_files_are_left_behind(tmp_path: Path) -> None:

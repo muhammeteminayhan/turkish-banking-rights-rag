@@ -419,6 +419,14 @@ def test_redirect_to_another_host_is_refused() -> None:
     assert requested == [f"{HOST}/old"]
 
 
+def test_redirect_to_another_allowed_host_is_refused_too() -> None:
+    def inner(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(302, headers={"location": "https://www.tcmb.gov.tr/x.pdf"})
+
+    with pytest.raises(FetchError, match="leaves"):
+        _client(_with_robots(MEVZUAT_ROBOTS, inner), FakeClock()).get(f"{HOST}/old")
+
+
 def test_redirect_loops_are_cut_off() -> None:
     client = _client(
         _with_robots(

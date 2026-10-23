@@ -96,9 +96,7 @@ sources:
   # matches the file on the site, the manifest build fails and this entry must be updated.
   - id: tcmb-ucret-talimat
     label: Ücret Tebliği Uygulama Talimatı (TCMB, 13.01.2026)
-    expected_title: >-
-      Finansal Tüketicilerden Alınacak Ücretlere İlişkin Usûl ve Esaslar Hakkında Tebliğe
-      (Sayı: 2020/7) İlişkin Uygulama Talimatı
+    # The title is the link text: the document is found by it, so it is checked by finding it.
     doc_type: talimat
     origin: tcmb
     listing_url: https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Banka+Hakkinda/Mevzuat/Bankacilik/

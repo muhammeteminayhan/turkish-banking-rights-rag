@@ -19,7 +19,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path, PurePosixPath
-from typing import Literal
+from typing import Literal, assert_never
 from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -27,8 +27,8 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from finhak.fsutil import atomic_write_bytes, atomic_write_text
 from finhak.ingest.http import FetchError, FetchResult, PoliteClient
 from finhak.ingest.scrape import decode_html, parse_page, parse_text
-from finhak.ingest.sources import SourceSpec
-from finhak.ingest.tcmb import find_listing_link
+from finhak.ingest.sources import AnySource, MevzuatSource, TcmbSource
+from finhak.ingest.tcmb import check_version, find_listing_link
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,8 @@ class CorruptFetchLog(RuntimeError):
 class FileRecord(BaseModel):
     model_config = _RECORD_CONFIG
 
-    url: str
+    url: str = Field(description="the URL that was requested (the cache key)")
+    final_url: str | None = Field(default=None, description="set when a redirect was followed")
     fetched_at: datetime
     content_type: str | None
     bytes: int = Field(ge=0)
@@ -126,13 +127,16 @@ def _is_word_html(content: bytes) -> bool:
 
 
 def fetch_source(
-    spec: SourceSpec, client: PoliteClient, raw_dir: Path, refresh: bool = False
+    spec: AnySource, client: PoliteClient, raw_dir: Path, refresh: bool = False
 ) -> FetchOutcome:
     store = _DocumentStore(raw_dir / spec.id, client, refresh)
-    if spec.origin == "tcmb":
-        _fetch_tcmb(spec, store)
-    else:
-        _fetch_mevzuat(spec, store)
+    match spec:
+        case MevzuatSource():
+            _fetch_mevzuat(spec, store)
+        case TcmbSource():
+            _fetch_tcmb(spec, store)
+        case _:
+            assert_never(spec)
     return FetchOutcome(
         source_id=spec.id,
         downloaded=tuple(store.downloaded),
@@ -143,7 +147,7 @@ def fetch_source(
     )
 
 
-def _fetch_mevzuat(spec: SourceSpec, store: "_DocumentStore") -> None:
+def _fetch_mevzuat(spec: MevzuatSource, store: "_DocumentStore") -> None:
     """Page and consolidated HTML text are required; linked Word/PDF files are optional."""
     page = store.get_required(PAGE_NAME, spec.page_url, _validate_page(spec.page_url))
     info = parse_page(decode_html(page, spec.page_url), spec.page_url)
@@ -152,38 +156,38 @@ def _fetch_mevzuat(spec: SourceSpec, store: "_DocumentStore") -> None:
         store.get_optional(source_file_name(url), url)
 
 
-def _fetch_tcmb(spec: SourceSpec, store: "_DocumentStore") -> None:
-    """Listing page and the PDF are both required: the PDF is the only copy of the text."""
-    link_text = _link_text(spec)
-    listing = store.get_required(
-        PAGE_NAME, spec.page_url, _validate_listing(spec.page_url, link_text)
-    )
-    link = find_listing_link(decode_html(listing, spec.page_url), spec.page_url, link_text)
+def _fetch_tcmb(spec: TcmbSource, store: "_DocumentStore") -> None:
+    """Listing page and the PDF are both required: the PDF is the only copy of the text.
+
+    The listing is checked for the expected version *before* it is stored, so a new version
+    on the site leaves the previously verified page and PDF untouched.
+    """
+    listing = store.get_required(PAGE_NAME, spec.page_url, _validate_listing(spec))
+    link = find_listing_link(decode_html(listing, spec.page_url), spec.page_url, spec.link_text)
     name = source_file_name(link.url)
     store.get_required(name, link.url, _validate_file(name))
 
 
-def linked_files(spec: SourceSpec, page: bytes) -> list[str]:
+def linked_files(spec: AnySource, page: bytes) -> list[str]:
     """The files a stored page leads to, in fetch order (used by --dry-run)."""
     html = decode_html(page, spec.page_url)
-    if spec.origin == "tcmb":
-        link = find_listing_link(html, spec.page_url, _link_text(spec))
-        return [source_file_name(link.url)]
-    info = parse_page(html, spec.page_url)
-    return [TEXT_NAME, *(source_file_name(url) for url in info.file_urls)]
+    match spec:
+        case TcmbSource():
+            link = find_listing_link(html, spec.page_url, spec.link_text)
+            return [source_file_name(link.url)]
+        case MevzuatSource():
+            info = parse_page(html, spec.page_url)
+            return [TEXT_NAME, *(source_file_name(url) for url in info.file_urls)]
+        case _:
+            assert_never(spec)
 
 
-def _link_text(spec: SourceSpec) -> str:
-    if spec.link_text is None:
-        raise ValueError(f"{spec.id}: tcmb source without link_text")
-    return spec.link_text
-
-
-def _validate_listing(url: str, link_text: str) -> Callable[[bytes], None]:
-    """Raises ScrapeError unless the listing still links the document."""
+def _validate_listing(spec: TcmbSource) -> Callable[[bytes], None]:
+    """Raises ScrapeError unless the listing links the expected version of the document."""
 
     def check(content: bytes) -> None:
-        find_listing_link(decode_html(content, url), url, link_text)
+        html = decode_html(content, spec.page_url)
+        check_version(spec, find_listing_link(html, spec.page_url, spec.link_text))
 
     return check
 
@@ -255,7 +259,7 @@ class _DocumentStore:
             return cached
         result = self._client.get(url)
         validate(result.content)
-        self._save(name, result)
+        self._save(name, url, result)
         return result.content
 
     def get_optional(self, name: str, url: str) -> None:
@@ -274,9 +278,9 @@ class _DocumentStore:
         try:
             detect_file_format(name, result.content)
         except FetchError as exc:
-            self._reject(name, result, str(exc))
+            self._reject(name, url, result, str(exc))
             return
-        self._save(name, result)
+        self._save(name, url, result)
 
     def _from_cache(self, name: str, url: str) -> bytes | None:
         record = self._log.files.get(name)
@@ -295,11 +299,12 @@ class _DocumentStore:
         self.cached.append(name)
         return content
 
-    def _save(self, name: str, result: FetchResult) -> None:
+    def _save(self, name: str, url: str, result: FetchResult) -> None:
         path = self._dir / name
         atomic_write_bytes(path, result.content)
         record = FileRecord(
-            url=result.url,
+            url=url,
+            final_url=result.url if result.url != url else None,
             fetched_at=result.fetched_at,
             content_type=result.content_type,
             bytes=len(result.content),
@@ -310,7 +315,7 @@ class _DocumentStore:
         self.downloaded.append(name)
         logger.info("downloaded %s (%d bytes) <- %s", path, len(result.content), result.url)
 
-    def _reject(self, name: str, result: FetchResult, reason: str) -> None:
+    def _reject(self, name: str, url: str, result: FetchResult, reason: str) -> None:
         path = self._dir / name
         if name in self._log.files and path.exists():
             logger.warning(
@@ -320,7 +325,7 @@ class _DocumentStore:
             return
         logger.warning("rejected %s from %s: %s", name, result.url, reason)
         path.unlink(missing_ok=True)
-        rejection = Rejection(url=result.url, fetched_at=result.fetched_at, reason=reason)
+        rejection = Rejection(url=url, fetched_at=result.fetched_at, reason=reason)
         files = {k: v for k, v in self._log.files.items() if k != name}
         self._write_log(FetchLog(files=files, rejected={**self._log.rejected, name: rejection}))
         self.rejected.append(name)

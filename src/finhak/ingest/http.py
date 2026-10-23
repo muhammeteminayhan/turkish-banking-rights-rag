@@ -155,8 +155,11 @@ class PoliteClient:
 
     def _follow(self, url: str, max_bytes: int, check_robots: bool) -> tuple[str, _RawResponse]:
         current = url
+        start_host = urlsplit(url).hostname
         for _ in range(MAX_REDIRECTS + 1):
             self._check_url(current)
+            if urlsplit(current).hostname != start_host:
+                raise FetchError(f"{current}: redirect leaves {start_host}")
             if check_robots:
                 self._check_robots(current)
             response = self._get_with_retries(current, max_bytes)

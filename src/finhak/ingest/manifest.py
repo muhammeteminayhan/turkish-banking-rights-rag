@@ -10,9 +10,9 @@ import hashlib
 import json
 from collections.abc import Iterable
 from pathlib import Path, PurePosixPath
-from typing import Final, Literal
+from typing import Final, Literal, assert_never
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from finhak.fsutil import atomic_write_text
 from finhak.ingest.fetch import (
@@ -28,14 +28,23 @@ from finhak.ingest.fetch import (
 )
 from finhak.ingest.http import FetchError
 from finhak.ingest.scrape import PageInfo, TextInfo, decode_html, parse_page, parse_text
-from finhak.ingest.sources import DocType, Origin, SourceSpec
-from finhak.ingest.tcmb import find_listing_link, version_date_from_url
+from finhak.ingest.sources import AnySource, DocType, MevzuatSource, Origin, TcmbSource
+from finhak.ingest.tcmb import NewVersionPublished, check_version, find_listing_link
 from finhak.textnorm import tr_casefold
 
 SCHEMA_VERSION: Final = 1
 # doc_html: a ".doc" download that is really a Word "web page" HTML export.
 FileFormat = Literal["html_page", "html_text", "doc", "doc_html", "docx", "pdf"]
 _FROZEN = ConfigDict(frozen=True, extra="forbid")
+# Entry fields that only one origin may (and must) fill in.
+_MEVZUAT_ONLY_FIELDS: tuple[str, ...] = (
+    "mevzuat_no",
+    "mevzuat_tur",
+    "rg_date",
+    "rg_number",
+    "amendment_note_count",
+)
+_TCMB_ONLY_FIELDS: tuple[str, ...] = ("version_date",)
 
 
 class ManifestError(RuntimeError):
@@ -121,6 +130,20 @@ class ManifestEntry(BaseModel):
         )
     )
 
+    @model_validator(mode="after")
+    def _fields_fit_origin(self) -> "ManifestEntry":
+        if self.origin == "mevzuat":
+            required, absent = _MEVZUAT_ONLY_FIELDS, _TCMB_ONLY_FIELDS
+        else:
+            required, absent = _TCMB_ONLY_FIELDS, _MEVZUAT_ONLY_FIELDS
+        missing = [name for name in required if getattr(self, name) is None]
+        extra = [name for name in absent if getattr(self, name) is not None]
+        if missing or extra:
+            raise ValueError(
+                f"{self.id} ({self.origin}): missing {missing or '-'}, not allowed {extra or '-'}"
+            )
+        return self
+
 
 class Manifest(BaseModel):
     model_config = _FROZEN
@@ -129,14 +152,14 @@ class Manifest(BaseModel):
     documents: tuple[ManifestEntry, ...]
 
 
-def build_manifest(specs: Iterable[SourceSpec], raw_dir: Path) -> Manifest:
+def build_manifest(specs: Iterable[AnySource], raw_dir: Path) -> Manifest:
     return Manifest(
         schema_version=SCHEMA_VERSION,
         documents=tuple(build_entry(spec, raw_dir) for spec in specs),
     )
 
 
-def build_entry(spec: SourceSpec, raw_dir: Path) -> ManifestEntry:
+def build_entry(spec: AnySource, raw_dir: Path) -> ManifestEntry:
     doc_dir = raw_dir / spec.id
     try:
         log = read_fetch_log(doc_dir)
@@ -144,43 +167,49 @@ def build_entry(spec: SourceSpec, raw_dir: Path) -> ManifestEntry:
         raise ManifestError(f"{spec.id}: {exc}") from exc
     if not log.files:
         raise ManifestError(f"{spec.id}: {doc_dir / FETCH_LOG_NAME} missing; run the fetcher")
-    if spec.origin == "tcmb":
-        return _tcmb_entry(spec, doc_dir, log)
-    return _mevzuat_entry(spec, doc_dir, log)
+    match spec:
+        case MevzuatSource():
+            return _mevzuat_entry(spec, doc_dir, log)
+        case TcmbSource():
+            return _tcmb_entry(spec, doc_dir, log)
+        case _:
+            assert_never(spec)
 
 
-def _tcmb_entry(spec: SourceSpec, doc_dir: Path, log: FetchLog) -> ManifestEntry:
-    link = find_listing_link(_read_html(doc_dir / PAGE_NAME), spec.page_url, spec.link_text or "")
-    version = version_date_from_url(link.url)
-    problems: list[str] = []
-    if spec.expected_title and tr_casefold(spec.expected_title) != tr_casefold(link.text):
-        problems.append(f"title: listing {link.text!r} vs sources.yaml {spec.expected_title!r}")
-    if spec.expected_version_date and spec.expected_version_date != version:
-        problems.append(
-            f"version_date: file on the site is {version} "
-            f"vs sources.yaml {spec.expected_version_date} ({link.url})"
-        )
-    if problems:
-        raise ManifestMismatch(f"{spec.id}: " + "; ".join(problems))
+def _tcmb_entry(spec: TcmbSource, doc_dir: Path, log: FetchLog) -> ManifestEntry:
+    link = find_listing_link(_read_html(doc_dir / PAGE_NAME), spec.page_url, spec.link_text)
+    try:
+        version = check_version(spec, link)
+    except NewVersionPublished as exc:
+        raise ManifestMismatch(f"{spec.id}: version_date: {exc}") from exc
 
     name = source_file_name(link.url)
     document = _file_entry(spec.id, doc_dir, None, name, log)
     if document.url != link.url:
         raise ManifestError(f"{spec.id}: {name} is not the file the listing links; run the fetcher")
     return ManifestEntry(
-        **_curated_fields(spec),
+        id=spec.id,
+        label=spec.label,
+        origin=spec.origin,
         title=link.text,
+        doc_type=spec.doc_type,
+        number=spec.number,
+        mevzuat_no=None,
+        mevzuat_tur=None,
+        issuer=spec.issuer,
         rg_date=None,
         rg_number=None,
         version_date=version,
+        source_page_url=spec.page_url,
         files=(_file_entry(spec.id, doc_dir, "html_page", PAGE_NAME, log), document),
         rejected_files=(),
         last_amendment=None,
         amendment_note_count=None,
+        status="in_force",
     )
 
 
-def _mevzuat_entry(spec: SourceSpec, doc_dir: Path, log: FetchLog) -> ManifestEntry:
+def _mevzuat_entry(spec: MevzuatSource, doc_dir: Path, log: FetchLog) -> ManifestEntry:
     page = parse_page(_read_html(doc_dir / PAGE_NAME), spec.page_url)
     text = parse_text(_read_html(doc_dir / TEXT_NAME))
     problems = _disagreements(spec, page, text)
@@ -209,11 +238,19 @@ def _mevzuat_entry(spec: SourceSpec, doc_dir: Path, log: FetchLog) -> ManifestEn
     )
     latest = text.latest_amendment
     return ManifestEntry(
-        **_curated_fields(spec),
+        id=spec.id,
+        label=spec.label,
+        origin=spec.origin,
         title=text.title,
+        doc_type=spec.doc_type,
+        number=spec.number,
+        mevzuat_no=spec.mevzuat_no,
+        mevzuat_tur=spec.mevzuat_tur,
+        issuer=spec.issuer,
         rg_date=page.rg_date,
         rg_number=page.rg_number,
         version_date=None,
+        source_page_url=spec.page_url,
         files=tuple(files),
         rejected_files=rejected,
         last_amendment=(
@@ -222,23 +259,8 @@ def _mevzuat_entry(spec: SourceSpec, doc_dir: Path, log: FetchLog) -> ManifestEn
             else None
         ),
         amendment_note_count=len(text.amendments),
+        status="in_force",
     )
-
-
-def _curated_fields(spec: SourceSpec) -> dict[str, object]:
-    """Fields copied from sources.yaml; the rest come from the downloaded files."""
-    return {
-        "id": spec.id,
-        "label": spec.label,
-        "origin": spec.origin,
-        "doc_type": spec.doc_type,
-        "number": spec.number,
-        "mevzuat_no": spec.mevzuat_no,
-        "mevzuat_tur": spec.mevzuat_tur,
-        "issuer": spec.issuer,
-        "source_page_url": spec.page_url,
-        "status": "in_force",
-    }
 
 
 def _read_html(path: Path) -> str:
@@ -247,7 +269,7 @@ def _read_html(path: Path) -> str:
     return decode_html(path.read_bytes(), str(path))
 
 
-def _disagreements(spec: SourceSpec, page: PageInfo, text: TextInfo) -> list[str]:
+def _disagreements(spec: MevzuatSource, page: PageInfo, text: TextInfo) -> list[str]:
     problems: list[str] = []
     if spec.expected_title and tr_casefold(spec.expected_title) != tr_casefold(text.title):
         problems.append(f"title: page {text.title!r} vs sources.yaml {spec.expected_title!r}")

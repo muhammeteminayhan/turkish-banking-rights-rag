@@ -6,7 +6,7 @@ from pathlib import Path
 import httpx
 
 from finhak.ingest.http import PoliteClient, RateLimiter
-from finhak.ingest.sources import SourceSpec
+from finhak.ingest.sources import MevzuatSource
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "mevzuat"
 FIXED_NOW = datetime(2026, 10, 23, 13, 0, tzinfo=UTC)
@@ -23,7 +23,7 @@ DOC_PATH = "/MevzuatMetin/1.5.6502.doc"
 PDF_PATH = "/MevzuatMetin/1.5.6502.pdf"
 PDF_URL = f"https://www.mevzuat.gov.tr{PDF_PATH}"
 
-SPEC_6502 = SourceSpec(
+SPEC_6502 = MevzuatSource(
     id="6502",
     label="6502 sayılı Kanun",
     expected_title="Tüketicinin Korunması Hakkında Kanun",

@@ -1,10 +1,10 @@
 from datetime import date
 
 import pytest
-from finhak.ingest.tcmb import find_listing_link, version_date_from_url
 from tcmb_stub import LINK_TEXT, LISTING_URL, TALIMAT_PREFIX, listing_html
 
 from finhak.ingest.scrape import ScrapeError
+from finhak.ingest.tcmb import find_listing_link, version_date_from_url
 
 pytestmark = pytest.mark.unit
 
@@ -47,8 +47,14 @@ def test_one_link_text_pointing_to_two_files_raises() -> None:
     "href",
     [
         "https://evil.example/wps/wcm/connect/a/1.pdf",
+        "https://www.tcmb.gov.tr.evil.example/wps/wcm/connect/a/1.pdf",
         "http://www.tcmb.gov.tr/wps/wcm/connect/a/1.pdf",
+        "https://www.tcmb.gov.tr:8443/wps/wcm/connect/a/1.pdf",
+        "https://user@www.tcmb.gov.tr/wps/wcm/connect/a/1.pdf",
+        "/wps/wcm/connect/../../evil/doc.pdf",
+        "/wps/wcm/connect/%2e%2e/%2e%2e/evil/doc.pdf",
         "/wps/wcm/connect/a/1.zip",
+        "/wps/wcm/connect/a/.pdf",
         "/baska/yer/1.pdf",
     ],
 )
@@ -66,12 +72,18 @@ def test_link_must_be_a_pdf_in_tcmb_content_store(href: str) -> None:
             date(2026, 1, 13),
         ),
         (
-            "https://www.tcmb.gov.tr/wps/wcm/connect/x/5+%C5%9Eubat+2025+Talimat.pdf",
+            "https://www.tcmb.gov.tr/wps/wcm/connect/x/Talimat+5+%C5%9Eubat+2025.pdf",
             date(2025, 2, 5),
         ),
         ("https://www.tcmb.gov.tr/wps/wcm/connect/x/Talimat_Haziran+2026.pdf", None),
         ("https://www.tcmb.gov.tr/wps/wcm/connect/x/Talimat.pdf", None),
         ("https://www.tcmb.gov.tr/wps/wcm/connect/x/31+%C5%9Eubat+2025.pdf", None),
+        # Only a date that ends the file name counts as the version date.
+        ("https://www.tcmb.gov.tr/wps/wcm/connect/x/T+-13+Ocak+2026+(5+Mart+2025).pdf", None),
+        (
+            "https://www.tcmb.gov.tr/wps/wcm/connect/x/5+Haziran+2020+Tarihli+YTAK_Ekim2026.pdf",
+            None,
+        ),
     ],
 )
 def test_version_date_is_read_from_the_file_name(url: str, expected: date | None) -> None:

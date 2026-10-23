@@ -45,6 +45,12 @@ files = ["src", "scripts"]
 mypy_path = "src"
 plugins = ["pydantic.mypy"]
 
+[tool.pydantic-mypy]
+# Model constructors are type-checked like ordinary functions.
+init_typed = true
+init_forbid_extra = true
+warn_required_dynamic_aliases = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"

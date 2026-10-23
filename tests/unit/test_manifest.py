@@ -5,9 +5,11 @@ from datetime import date
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
 from finhak.ingest.fetch import FETCH_LOG_NAME
 from finhak.ingest.manifest import (
+    ManifestEntry,
     ManifestError,
     ManifestMismatch,
     build_entry,
@@ -17,7 +19,7 @@ from finhak.ingest.manifest import (
     verify_manifest,
     write_manifest,
 )
-from finhak.ingest.sources import SourceSpec
+from finhak.ingest.sources import MevzuatSource
 
 pytestmark = pytest.mark.unit
 
@@ -27,7 +29,7 @@ DOC_BYTES = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + b"\x00" * 32
 # The 6502 and 34343 fixture pages both link a .doc and a .pdf file.
 LINKED_FILES = {"source.doc": DOC_BYTES, "source.pdf": PDF_BYTES}
 
-SPEC_6502 = SourceSpec(
+SPEC_6502 = MevzuatSource(
     id="6502",
     label="6502 sayılı Kanun",
     expected_title="Tüketicinin Korunması Hakkında Kanun",
@@ -39,7 +41,7 @@ SPEC_6502 = SourceSpec(
     expected_rg_date=date(2013, 11, 28),
     expected_rg_number="28835",
 )
-SPEC_TEBLIG = SourceSpec(
+SPEC_TEBLIG = MevzuatSource(
     id="tcmb-ucret-teblig",
     label="Ücret Tebliği",
     expected_title=(
@@ -56,7 +58,7 @@ SPEC_TEBLIG = SourceSpec(
 
 
 def _make_raw_dir(
-    raw_dir: Path, spec: SourceSpec, page: bytes, text: bytes, files: dict[str, bytes]
+    raw_dir: Path, spec: MevzuatSource, page: bytes, text: bytes, files: dict[str, bytes]
 ) -> Path:
     doc_dir = raw_dir / spec.id
     doc_dir.mkdir(parents=True)
@@ -184,6 +186,24 @@ def test_entry_records_the_latest_amendment_note(raw_6502: Path) -> None:
     assert entry.last_amendment.date == date(2022, 3, 24)
     assert entry.last_amendment.reference == "7392/2"
     assert entry.amendment_note_count == 1
+
+
+@pytest.mark.parametrize(
+    ("change", "field"),
+    [
+        ({"version_date": "2026-01-13"}, "version_date"),
+        ({"rg_date": None}, "rg_date"),
+        ({"amendment_note_count": None}, "amendment_note_count"),
+        ({"origin": "tcmb"}, "rg_date"),
+    ],
+)
+def test_entry_fields_must_fit_its_origin(
+    raw_6502: Path, change: dict[str, object], field: str
+) -> None:
+    data = build_entry(SPEC_6502, raw_6502).model_dump()
+
+    with pytest.raises(ValidationError, match=field):
+        ManifestEntry.model_validate({**data, **change})
 
 
 def test_title_comparison_ignores_case_and_circumflex(

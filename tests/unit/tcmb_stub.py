@@ -5,7 +5,7 @@ from pathlib import Path
 
 import httpx
 
-from finhak.ingest.sources import SourceSpec
+from finhak.ingest.sources import TcmbSource
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "tcmb"
 LISTING_URL = (
@@ -19,10 +19,9 @@ LINK_TEXT = (
 TALIMAT_PREFIX = "/wps/wcm/connect/9fcd654e-65a7-4c42-8292-06ec3846e751/"
 PDF_BYTES = b"%PDF-1.7\n%talimat\n"
 
-SPEC_TALIMAT = SourceSpec(
+SPEC_TALIMAT = TcmbSource(
     id="tcmb-ucret-talimat",
     label="Ücret Tebliği Uygulama Talimatı (TCMB)",
-    expected_title=LINK_TEXT,
     doc_type="talimat",
     origin="tcmb",
     listing_url=LISTING_URL,
