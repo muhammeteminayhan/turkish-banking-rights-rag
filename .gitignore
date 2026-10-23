@@ -31,3 +31,6 @@ eval/results/**/raw/
 Thumbs.db
 .vscode/
 .idea/
+
+# Parsed chunks are rebuilt by scripts/parse_sources.py (report files are committed)
+data/processed/chunks.jsonl

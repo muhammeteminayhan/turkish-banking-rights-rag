@@ -12,6 +12,7 @@ authors = [{ name = "Muhammet Emin Ayhan" }]
 dependencies = [
     "beautifulsoup4>=4.12",
     "httpx>=0.27",
+    "pdfplumber>=0.11",
     "pydantic>=2.7",
     "pyyaml>=6.0",
 ]
@@ -58,6 +59,7 @@ markers = [
     "unit: fast, no network, no database",
     "integration: needs a running service such as PostgreSQL",
     "network: hits the real internet (deselected by default in CI)",
+    "data: needs the downloaded corpus in data/raw (skipped when it is absent, e.g. in CI)",
 ]
 
 [tool.coverage.run]
