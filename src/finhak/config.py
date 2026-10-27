@@ -31,6 +31,14 @@ def _unquote(value: str) -> str:
     return value.split(" #", 1)[0].strip()
 
 
+def merged_env(
+    environ: Mapping[str, str] | None = None, env_file: Path = Path(".env")
+) -> dict[str, str]:
+    """The .env settings overlaid with the non-empty environment variables."""
+    env = os.environ if environ is None else environ
+    return {**read_env_file(env_file), **{key: value for key, value in env.items() if value}}
+
+
 def database_url(environ: Mapping[str, str] | None = None, env_file: Path = Path(".env")) -> str:
     env = os.environ if environ is None else environ
     return (

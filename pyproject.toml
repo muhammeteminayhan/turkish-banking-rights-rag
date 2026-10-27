@@ -29,6 +29,10 @@ dependencies = [
 models = [
     "sentence-transformers>=3.0",
 ]
+# Claude as the answer model (optional; Ollama is the default). Not needed for tests.
+anthropic = [
+    "anthropic>=1.0",
+]
 dev = [
     "mypy>=1.11",
     "pytest>=8.0",
@@ -60,6 +64,11 @@ plugins = ["pydantic.mypy"]
 [[tool.mypy.overrides]]
 # No type hints shipped; both are wrapped in finhak.retrieval.bm25.
 module = ["rank_bm25", "snowballstemmer"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# Optional extra; finhak.llm.anthropic_provider imports it lazily.
+module = ["anthropic"]
 ignore_missing_imports = true
 
 [tool.pydantic-mypy]

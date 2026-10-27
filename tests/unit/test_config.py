@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from finhak.config import DEFAULT_DATABASE_URL, database_url, read_env_file
+from finhak.config import DEFAULT_DATABASE_URL, database_url, merged_env, read_env_file
 
 pytestmark = pytest.mark.unit
 
@@ -36,6 +36,16 @@ def test_export_lines_and_inline_comments_are_understood(tmp_path: Path) -> None
         "DATABASE_URL": "postgresql://a/b",
         "QUOTED": "x # not a comment",
     }
+
+
+def test_merged_env_lets_set_variables_win_over_the_env_file(tmp_path: Path) -> None:
+    env_file = tmp_path / ".env"
+    env_file.write_text("LLM_PROVIDER=anthropic\nOLLAMA_MODEL=qwen3:8b\n", encoding="utf-8")
+
+    merged = merged_env({"LLM_PROVIDER": "ollama", "OLLAMA_MODEL": ""}, env_file)
+
+    assert merged["LLM_PROVIDER"] == "ollama"
+    assert merged["OLLAMA_MODEL"] == "qwen3:8b"  # an empty variable does not hide the file
 
 
 def test_the_default_matches_docker_compose(tmp_path: Path) -> None:

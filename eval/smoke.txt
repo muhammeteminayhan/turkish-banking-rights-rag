@@ -1,0 +1,22 @@
+# M4 smoke set: 20 draft batch-1 questions across all six categories.
+# Not an evaluation set; replace with approved ids once batch 1 is approved.
+b1-001  # dogrudan, cites 6502 m.22
+b1-003  # dogrudan, "5464 m.10" (inferred fıkra)
+b1-007  # dogrudan, Tebliğ ≡ Talimat
+b1-011  # dogrudan, card limit
+b1-016  # dogrudan, cayma (distance contract)
+b1-021  # dogrudan, KVKK deletion
+b1-024  # cok_maddeli, cayma: Kanun + Yönetmelik
+b1-025  # cok_maddeli, early repayment
+b1-027  # cok_maddeli, minimum payment
+b1-033  # sayisal, EFT cap from 6/1/2026
+b1-036  # sayisal, cash advance
+b1-039  # sayisal, dormant card
+b1-045  # degisiklik, BDDK → TCMB
+b1-046  # degisiklik, 7 days
+b1-051  # kapsam_disi, rent
+b1-053  # kapsam_disi, tax refund
+b1-056  # kapsam_disi, policy rate
+b1-059  # yanlis_onerme, no-fee card exists
+b1-060  # yanlis_onerme, early repayment discount
+b1-064  # yanlis_onerme, late fee
