@@ -1,0 +1,1024 @@
+{
+  "golden": "eval/drafts/batch1.jsonl",
+  "golden_sha256": "f3e104ce540addf2c2b33d357d6b97218fad4b4351e86e3081685740ffadc84d",
+  "questions": 64,
+  "scored": 56,
+  "status": {
+    "draft": 64,
+    "approved": 0
+  },
+  "created_at": "2026-10-27T08:49:33+00:00",
+  "index": {
+    "schema_version": "1",
+    "embedder": "BAAI/bge-m3@5617a9f6",
+    "dim": "1024",
+    "chunks": "2692",
+    "source_sha256": "b364cb9ec27c4d2a9b8ba52daf1743e259428e0ec4facbc1bf45edd678335f2d",
+    "built_at": "2026-10-27T08:47:46+00:00"
+  },
+  "reranker": "BAAI/bge-reranker-v2-m3@953dc6f6",
+  "candidates": 30,
+  "limit": 10,
+  "configs": {
+    "fts": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.1518,
+        "recall@5": 0.25,
+        "recall@10": 0.3393,
+        "mrr": 0.2438
+      },
+      "madde": {
+        "recall@1": 0.1875,
+        "recall@5": 0.3036,
+        "recall@10": 0.3929,
+        "mrr": 0.2829
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.15,
+          "chunk_recall@5": 0.35,
+          "chunk_recall@10": 0.4,
+          "chunk_mrr": 0.381,
+          "madde_recall@1": 0.15,
+          "madde_recall@5": 0.35,
+          "madde_recall@10": 0.45,
+          "madde_mrr": 0.381
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.0625,
+          "chunk_recall@5": 0.125,
+          "chunk_recall@10": 0.375,
+          "chunk_mrr": 0.1667,
+          "madde_recall@1": 0.0625,
+          "madde_recall@5": 0.125,
+          "madde_recall@10": 0.375,
+          "madde_mrr": 0.1667
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.1818,
+          "chunk_recall@5": 0.2273,
+          "chunk_recall@10": 0.2727,
+          "chunk_mrr": 0.2121,
+          "madde_recall@1": 0.2273,
+          "madde_recall@5": 0.3182,
+          "madde_recall@10": 0.3636,
+          "madde_mrr": 0.2727
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.2,
+          "chunk_recall@5": 0.4,
+          "chunk_recall@10": 0.5,
+          "chunk_mrr": 0.27,
+          "madde_recall@1": 0.2,
+          "madde_recall@5": 0.4,
+          "madde_recall@10": 0.5,
+          "madde_mrr": 0.27
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0833,
+          "chunk_recall@5": 0.0833,
+          "chunk_recall@10": 0.1667,
+          "chunk_mrr": 0.1905,
+          "madde_recall@1": 0.25,
+          "madde_recall@5": 0.25,
+          "madde_recall@10": 0.25,
+          "madde_mrr": 0.3333
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0,
+          "chunk_recall@5": 0.0,
+          "chunk_recall@10": 0.0,
+          "chunk_mrr": 0.0,
+          "madde_recall@1": 0.0,
+          "madde_recall@5": 0.0,
+          "madde_recall@10": 0.0,
+          "madde_mrr": 0.0
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.17,
+          "chunk_recall@5": 0.28,
+          "chunk_recall@10": 0.38,
+          "chunk_mrr": 0.273,
+          "madde_recall@1": 0.21,
+          "madde_recall@5": 0.34,
+          "madde_recall@10": 0.44,
+          "madde_mrr": 0.3169
+        }
+      },
+      "latency_ms": {
+        "p50": 5.8,
+        "p95": 8.3
+      }
+    },
+    "bm25": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.2917,
+        "recall@5": 0.5536,
+        "recall@10": 0.6339,
+        "mrr": 0.4744
+      },
+      "madde": {
+        "recall@1": 0.3393,
+        "recall@5": 0.6875,
+        "recall@10": 0.7857,
+        "mrr": 0.547
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.2,
+          "chunk_recall@5": 0.45,
+          "chunk_recall@10": 0.6,
+          "chunk_mrr": 0.5421,
+          "madde_recall@1": 0.25,
+          "madde_recall@5": 0.55,
+          "madde_recall@10": 0.7,
+          "madde_mrr": 0.5421
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.1875,
+          "chunk_recall@5": 0.3125,
+          "chunk_recall@10": 0.4375,
+          "chunk_mrr": 0.3264,
+          "madde_recall@1": 0.1875,
+          "madde_recall@5": 0.5,
+          "madde_recall@10": 0.625,
+          "madde_mrr": 0.3889
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.2727,
+          "chunk_recall@5": 0.6061,
+          "chunk_recall@10": 0.6515,
+          "chunk_mrr": 0.4114,
+          "madde_recall@1": 0.3636,
+          "madde_recall@5": 0.7727,
+          "madde_recall@10": 0.8182,
+          "madde_mrr": 0.5515
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.6333,
+          "chunk_recall@5": 0.8667,
+          "chunk_recall@10": 0.8667,
+          "chunk_mrr": 0.8,
+          "madde_recall@1": 0.65,
+          "madde_recall@5": 0.9,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.8125
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0833,
+          "chunk_recall@5": 0.3333,
+          "chunk_recall@10": 0.5,
+          "chunk_mrr": 0.2476,
+          "madde_recall@1": 0.0833,
+          "madde_recall@5": 0.5,
+          "madde_recall@10": 0.6667,
+          "madde_mrr": 0.3071
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.1667,
+          "chunk_recall@5": 0.7222,
+          "chunk_recall@10": 0.7222,
+          "chunk_mrr": 0.4444,
+          "madde_recall@1": 0.1667,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.4722
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.3067,
+          "chunk_recall@5": 0.5333,
+          "chunk_recall@10": 0.6233,
+          "chunk_mrr": 0.478,
+          "madde_recall@1": 0.36,
+          "madde_recall@5": 0.67,
+          "madde_recall@10": 0.78,
+          "madde_mrr": 0.556
+        }
+      },
+      "latency_ms": {
+        "p50": 9.3,
+        "p95": 15.7
+      }
+    },
+    "bm25_prefix5": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.3214,
+        "recall@5": 0.6399,
+        "recall@10": 0.747,
+        "mrr": 0.5126
+      },
+      "madde": {
+        "recall@1": 0.375,
+        "recall@5": 0.6964,
+        "recall@10": 0.8304,
+        "mrr": 0.562
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.3,
+          "chunk_recall@5": 0.45,
+          "chunk_recall@10": 0.7,
+          "chunk_mrr": 0.6952,
+          "madde_recall@1": 0.4,
+          "madde_recall@5": 0.55,
+          "madde_recall@10": 0.75,
+          "madde_mrr": 0.6952
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.1875,
+          "chunk_recall@5": 0.625,
+          "chunk_recall@10": 0.625,
+          "chunk_mrr": 0.3479,
+          "madde_recall@1": 0.1875,
+          "madde_recall@5": 0.625,
+          "madde_recall@10": 0.75,
+          "madde_mrr": 0.3812
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.3182,
+          "chunk_recall@5": 0.6818,
+          "chunk_recall@10": 0.7576,
+          "chunk_mrr": 0.4564,
+          "madde_recall@1": 0.4091,
+          "madde_recall@5": 0.7273,
+          "madde_recall@10": 0.8636,
+          "madde_mrr": 0.5587
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.6,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.8667,
+          "chunk_mrr": 0.7,
+          "madde_recall@1": 0.6,
+          "madde_recall@5": 0.85,
+          "madde_recall@10": 0.9,
+          "madde_mrr": 0.725
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0833,
+          "chunk_recall@5": 0.5,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.321,
+          "madde_recall@1": 0.0833,
+          "madde_recall@5": 0.6667,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.321
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.3333,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.9444,
+          "chunk_mrr": 0.5417,
+          "madde_recall@1": 0.3333,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.5417
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.32,
+          "chunk_recall@5": 0.6167,
+          "chunk_recall@10": 0.7233,
+          "chunk_mrr": 0.5091,
+          "madde_recall@1": 0.38,
+          "madde_recall@5": 0.68,
+          "madde_recall@10": 0.81,
+          "madde_mrr": 0.5644
+        }
+      },
+      "latency_ms": {
+        "p50": 7.5,
+        "p95": 10.5
+      }
+    },
+    "vector": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.4435,
+        "recall@5": 0.7351,
+        "recall@10": 0.8393,
+        "mrr": 0.6464
+      },
+      "madde": {
+        "recall@1": 0.4911,
+        "recall@5": 0.8214,
+        "recall@10": 0.875,
+        "mrr": 0.6805
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.35,
+          "chunk_recall@5": 0.6,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.8,
+          "madde_recall@1": 0.4,
+          "madde_recall@5": 0.7,
+          "madde_recall@10": 0.8,
+          "madde_mrr": 0.8
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.4375,
+          "chunk_recall@5": 0.625,
+          "chunk_recall@10": 0.875,
+          "chunk_mrr": 0.5607,
+          "madde_recall@1": 0.4375,
+          "madde_recall@5": 0.75,
+          "madde_recall@10": 0.875,
+          "madde_mrr": 0.5741
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.5455,
+          "chunk_recall@5": 0.8182,
+          "chunk_recall@10": 0.8636,
+          "chunk_mrr": 0.6482,
+          "madde_recall@1": 0.5909,
+          "madde_recall@5": 0.9091,
+          "madde_recall@10": 0.9091,
+          "madde_mrr": 0.7076
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.5333,
+          "chunk_recall@5": 0.9667,
+          "chunk_recall@10": 1.0,
+          "chunk_mrr": 0.7833,
+          "madde_recall@1": 0.65,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.8333
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0833,
+          "chunk_recall@5": 0.4167,
+          "chunk_recall@10": 0.5833,
+          "chunk_mrr": 0.2694,
+          "madde_recall@1": 0.0833,
+          "madde_recall@5": 0.5,
+          "madde_recall@10": 0.6667,
+          "madde_mrr": 0.2694
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.5,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.8333,
+          "chunk_mrr": 0.6167,
+          "madde_recall@1": 0.5,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.6167
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.4367,
+          "chunk_recall@5": 0.7233,
+          "chunk_recall@10": 0.84,
+          "chunk_mrr": 0.6499,
+          "madde_recall@1": 0.49,
+          "madde_recall@5": 0.82,
+          "madde_recall@10": 0.88,
+          "madde_mrr": 0.6882
+        }
+      },
+      "latency_ms": {
+        "p50": 19.9,
+        "p95": 24.5
+      }
+    },
+    "hybrid": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.3185,
+        "recall@5": 0.5833,
+        "recall@10": 0.7262,
+        "mrr": 0.501
+      },
+      "madde": {
+        "recall@1": 0.4018,
+        "recall@5": 0.6786,
+        "recall@10": 0.7589,
+        "mrr": 0.5551
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.25,
+          "chunk_recall@5": 0.5,
+          "chunk_recall@10": 0.6,
+          "chunk_mrr": 0.5978,
+          "madde_recall@1": 0.3,
+          "madde_recall@5": 0.55,
+          "madde_recall@10": 0.7,
+          "madde_mrr": 0.5978
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.4375,
+          "chunk_recall@5": 0.625,
+          "chunk_recall@10": 0.625,
+          "chunk_mrr": 0.5312,
+          "madde_recall@1": 0.4375,
+          "madde_recall@5": 0.625,
+          "madde_recall@10": 0.625,
+          "madde_mrr": 0.5312
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.2727,
+          "chunk_recall@5": 0.5,
+          "chunk_recall@10": 0.7727,
+          "chunk_mrr": 0.3781,
+          "madde_recall@1": 0.4091,
+          "madde_recall@5": 0.6364,
+          "madde_recall@10": 0.7727,
+          "madde_mrr": 0.4905
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.5333,
+          "chunk_recall@5": 0.8667,
+          "chunk_recall@10": 0.9667,
+          "chunk_mrr": 0.7476,
+          "madde_recall@1": 0.55,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.7533
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0833,
+          "chunk_recall@5": 0.5,
+          "chunk_recall@10": 0.5,
+          "chunk_mrr": 0.3389,
+          "madde_recall@1": 0.25,
+          "madde_recall@5": 0.5833,
+          "madde_recall@10": 0.5833,
+          "madde_mrr": 0.4222
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.0,
+          "chunk_recall@5": 0.1667,
+          "chunk_recall@10": 0.6667,
+          "chunk_mrr": 0.1208,
+          "madde_recall@1": 0.0,
+          "madde_recall@5": 0.1667,
+          "madde_recall@10": 0.6667,
+          "madde_mrr": 0.1208
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.3567,
+          "chunk_recall@5": 0.6333,
+          "chunk_recall@10": 0.7333,
+          "chunk_mrr": 0.5466,
+          "madde_recall@1": 0.45,
+          "madde_recall@5": 0.74,
+          "madde_recall@10": 0.77,
+          "madde_mrr": 0.6072
+        }
+      },
+      "latency_ms": {
+        "p50": 36.5,
+        "p95": 40.6
+      }
+    },
+    "hybrid_rerank": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.631,
+        "recall@5": 0.8333,
+        "recall@10": 0.878,
+        "mrr": 0.8133
+      },
+      "madde": {
+        "recall@1": 0.6696,
+        "recall@5": 0.875,
+        "recall@10": 0.9196,
+        "mrr": 0.8276
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.45,
+          "chunk_recall@5": 0.7,
+          "chunk_recall@10": 0.85,
+          "chunk_mrr": 0.9333,
+          "madde_recall@1": 0.5,
+          "madde_recall@5": 0.8,
+          "madde_recall@10": 0.95,
+          "madde_mrr": 0.9333
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.4375,
+          "chunk_recall@5": 0.8125,
+          "chunk_recall@10": 0.9375,
+          "chunk_mrr": 0.6845,
+          "madde_recall@1": 0.4375,
+          "madde_recall@5": 0.875,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.6845
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.6818,
+          "chunk_recall@5": 0.8636,
+          "chunk_recall@10": 0.8636,
+          "chunk_mrr": 0.7455,
+          "madde_recall@1": 0.7273,
+          "madde_recall@5": 0.8636,
+          "madde_recall@10": 0.8636,
+          "madde_mrr": 0.7818
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.9333,
+          "chunk_recall@5": 0.9667,
+          "chunk_recall@10": 0.9667,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 0.95,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.5,
+          "chunk_recall@5": 0.75,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.7222,
+          "madde_recall@1": 0.5833,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.7222
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.8333,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.8333,
+          "chunk_mrr": 0.8333,
+          "madde_recall@1": 0.8333,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.8333
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.6067,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.8833,
+          "chunk_mrr": 0.8109,
+          "madde_recall@1": 0.65,
+          "madde_recall@5": 0.88,
+          "madde_recall@10": 0.93,
+          "madde_mrr": 0.8269
+        }
+      },
+      "latency_ms": {
+        "p50": 296.9,
+        "p95": 569.0
+      }
+    },
+    "full": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.6369,
+        "recall@5": 0.8512,
+        "recall@10": 0.8958,
+        "mrr": 0.8311
+      },
+      "madde": {
+        "recall@1": 0.6875,
+        "recall@5": 0.8929,
+        "recall@10": 0.9375,
+        "mrr": 0.8454
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.45,
+          "chunk_recall@5": 0.7,
+          "chunk_recall@10": 0.85,
+          "chunk_mrr": 0.9333,
+          "madde_recall@1": 0.5,
+          "madde_recall@5": 0.8,
+          "madde_recall@10": 0.95,
+          "madde_mrr": 0.9333
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.4375,
+          "chunk_recall@5": 0.8125,
+          "chunk_recall@10": 0.9375,
+          "chunk_mrr": 0.6845,
+          "madde_recall@1": 0.4375,
+          "madde_recall@5": 0.875,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.6845
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.697,
+          "chunk_recall@5": 0.9091,
+          "chunk_recall@10": 0.9091,
+          "chunk_mrr": 0.7909,
+          "madde_recall@1": 0.7727,
+          "madde_recall@5": 0.9091,
+          "madde_recall@10": 0.9091,
+          "madde_mrr": 0.8273
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.9333,
+          "chunk_recall@5": 0.9667,
+          "chunk_recall@10": 0.9667,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 0.95,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.5,
+          "chunk_recall@5": 0.75,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.7222,
+          "madde_recall@1": 0.5833,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.7222
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.8889,
+          "chunk_recall@5": 1.0,
+          "chunk_recall@10": 1.0,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 1.0,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.6067,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.8833,
+          "chunk_mrr": 0.8109,
+          "madde_recall@1": 0.65,
+          "madde_recall@5": 0.88,
+          "madde_recall@10": 0.93,
+          "madde_mrr": 0.8269
+        }
+      },
+      "latency_ms": {
+        "p50": 310.3,
+        "p95": 652.1
+      }
+    },
+    "hybrid_bm25": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.5179,
+        "recall@5": 0.7173,
+        "recall@10": 0.8125,
+        "mrr": 0.6834
+      },
+      "madde": {
+        "recall@1": 0.5982,
+        "recall@5": 0.7589,
+        "recall@10": 0.8661,
+        "mrr": 0.7344
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.35,
+          "chunk_recall@5": 0.6,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.7893,
+          "madde_recall@1": 0.4,
+          "madde_recall@5": 0.65,
+          "madde_recall@10": 0.85,
+          "madde_mrr": 0.7893
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.3125,
+          "chunk_recall@5": 0.625,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.4764,
+          "madde_recall@1": 0.3125,
+          "madde_recall@5": 0.625,
+          "madde_recall@10": 0.75,
+          "madde_mrr": 0.5208
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.6364,
+          "chunk_recall@5": 0.7273,
+          "chunk_recall@10": 0.7879,
+          "chunk_mrr": 0.692,
+          "madde_recall@1": 0.7727,
+          "madde_recall@5": 0.7727,
+          "madde_recall@10": 0.8636,
+          "madde_mrr": 0.783
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.8,
+          "chunk_recall@5": 0.9667,
+          "chunk_recall@10": 0.9667,
+          "chunk_mrr": 0.87,
+          "madde_recall@1": 0.85,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.92
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.1667,
+          "chunk_recall@5": 0.5833,
+          "chunk_recall@10": 0.8333,
+          "chunk_mrr": 0.4405,
+          "madde_recall@1": 0.25,
+          "madde_recall@5": 0.6667,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.4405
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.8333,
+          "chunk_recall@5": 0.8333,
+          "chunk_recall@10": 0.8889,
+          "chunk_mrr": 0.85,
+          "madde_recall@1": 0.8333,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.85
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.48,
+          "chunk_recall@5": 0.7033,
+          "chunk_recall@10": 0.8033,
+          "chunk_mrr": 0.6634,
+          "madde_recall@1": 0.57,
+          "madde_recall@5": 0.75,
+          "madde_recall@10": 0.85,
+          "madde_mrr": 0.7205
+        }
+      },
+      "latency_ms": {
+        "p50": 39.2,
+        "p95": 47.1
+      }
+    },
+    "hybrid_bm25_rerank": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.6369,
+        "recall@5": 0.8631,
+        "recall@10": 0.9345,
+        "mrr": 0.8432
+      },
+      "madde": {
+        "recall@1": 0.6875,
+        "recall@5": 0.9107,
+        "recall@10": 0.9732,
+        "mrr": 0.8575
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.45,
+          "chunk_recall@5": 0.7,
+          "chunk_recall@10": 0.9,
+          "chunk_mrr": 0.9333,
+          "madde_recall@1": 0.5,
+          "madde_recall@5": 0.8,
+          "madde_recall@10": 0.95,
+          "madde_mrr": 0.9333
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.4375,
+          "chunk_recall@5": 0.8125,
+          "chunk_recall@10": 0.9375,
+          "chunk_mrr": 0.6823,
+          "madde_recall@1": 0.4375,
+          "madde_recall@5": 0.875,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.6823
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.697,
+          "chunk_recall@5": 0.9394,
+          "chunk_recall@10": 0.9848,
+          "chunk_mrr": 0.8224,
+          "madde_recall@1": 0.7727,
+          "madde_recall@5": 0.9545,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.8588
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.9333,
+          "chunk_recall@5": 0.9667,
+          "chunk_recall@10": 0.9667,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 0.95,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.5,
+          "chunk_recall@5": 0.75,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.7222,
+          "madde_recall@1": 0.5833,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.7222
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.8889,
+          "chunk_recall@5": 0.9444,
+          "chunk_recall@10": 0.9444,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 1.0,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.6067,
+          "chunk_recall@5": 0.8533,
+          "chunk_recall@10": 0.9333,
+          "chunk_mrr": 0.8244,
+          "madde_recall@1": 0.65,
+          "madde_recall@5": 0.9,
+          "madde_recall@10": 0.97,
+          "madde_mrr": 0.8404
+        }
+      },
+      "latency_ms": {
+        "p50": 325.1,
+        "p95": 647.5
+      }
+    },
+    "full_bm25": {
+      "n": 56,
+      "chunk": {
+        "recall@1": 0.6369,
+        "recall@5": 0.869,
+        "recall@10": 0.9405,
+        "mrr": 0.8432
+      },
+      "madde": {
+        "recall@1": 0.6875,
+        "recall@5": 0.9107,
+        "recall@10": 0.9732,
+        "mrr": 0.8575
+      },
+      "by_category": {
+        "cok_maddeli": {
+          "n": 10.0,
+          "chunk_recall@1": 0.45,
+          "chunk_recall@5": 0.7,
+          "chunk_recall@10": 0.9,
+          "chunk_mrr": 0.9333,
+          "madde_recall@1": 0.5,
+          "madde_recall@5": 0.8,
+          "madde_recall@10": 0.95,
+          "madde_mrr": 0.9333
+        },
+        "degisiklik": {
+          "n": 8.0,
+          "chunk_recall@1": 0.4375,
+          "chunk_recall@5": 0.8125,
+          "chunk_recall@10": 0.9375,
+          "chunk_mrr": 0.6823,
+          "madde_recall@1": 0.4375,
+          "madde_recall@5": 0.875,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.6823
+        },
+        "dogrudan": {
+          "n": 22.0,
+          "chunk_recall@1": 0.697,
+          "chunk_recall@5": 0.9545,
+          "chunk_recall@10": 1.0,
+          "chunk_mrr": 0.8224,
+          "madde_recall@1": 0.7727,
+          "madde_recall@5": 0.9545,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 0.8588
+        },
+        "sayisal": {
+          "n": 10.0,
+          "chunk_recall@1": 0.9333,
+          "chunk_recall@5": 0.9667,
+          "chunk_recall@10": 0.9667,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 0.95,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "yanlis_onerme": {
+          "n": 6.0,
+          "chunk_recall@1": 0.5,
+          "chunk_recall@5": 0.75,
+          "chunk_recall@10": 0.75,
+          "chunk_mrr": 0.7222,
+          "madde_recall@1": 0.5833,
+          "madde_recall@5": 0.8333,
+          "madde_recall@10": 0.8333,
+          "madde_mrr": 0.7222
+        }
+      },
+      "by_citation": {
+        "cites_article": {
+          "n": 6.0,
+          "chunk_recall@1": 0.8889,
+          "chunk_recall@5": 1.0,
+          "chunk_recall@10": 1.0,
+          "chunk_mrr": 1.0,
+          "madde_recall@1": 1.0,
+          "madde_recall@5": 1.0,
+          "madde_recall@10": 1.0,
+          "madde_mrr": 1.0
+        },
+        "no_citation": {
+          "n": 50.0,
+          "chunk_recall@1": 0.6067,
+          "chunk_recall@5": 0.8533,
+          "chunk_recall@10": 0.9333,
+          "chunk_mrr": 0.8244,
+          "madde_recall@1": 0.65,
+          "madde_recall@5": 0.9,
+          "madde_recall@10": 0.97,
+          "madde_mrr": 0.8404
+        }
+      },
+      "latency_ms": {
+        "p50": 318.3,
+        "p95": 628.8
+      }
+    }
+  }
+}

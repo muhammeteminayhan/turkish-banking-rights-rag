@@ -12,12 +12,23 @@ authors = [{ name = "Muhammet Emin Ayhan" }]
 dependencies = [
     "beautifulsoup4>=4.12",
     "httpx>=0.27",
+    "numpy>=2.0",
     "pdfplumber>=0.11",
+    "pgvector>=0.3",
+    "psycopg[binary]>=3.2",
     "pydantic>=2.7",
     "pyyaml>=6.0",
+    "rank-bm25>=0.2.2",
+    "snowballstemmer>=2.2",
 ]
 
 [project.optional-dependencies]
+# Embedding and reranking models. Install torch first for your GPU, e.g.
+# pip install torch --index-url https://download.pytorch.org/whl/cu128
+# Tests use a fake embedder, so CI does not need this extra.
+models = [
+    "sentence-transformers>=3.0",
+]
 dev = [
     "mypy>=1.11",
     "pytest>=8.0",
@@ -42,9 +53,14 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-files = ["src", "scripts"]
+files = ["src", "scripts", "eval"]
 mypy_path = "src"
 plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+# No type hints shipped; both are wrapped in finhak.retrieval.bm25.
+module = ["rank_bm25", "snowballstemmer"]
+ignore_missing_imports = true
 
 [tool.pydantic-mypy]
 # Model constructors are type-checked like ordinary functions.
@@ -60,6 +76,7 @@ markers = [
     "integration: needs a running service such as PostgreSQL",
     "network: hits the real internet (deselected by default in CI)",
     "data: needs the downloaded corpus in data/raw (skipped when it is absent, e.g. in CI)",
+    "models: loads bge-m3 / the reranker from the local Hugging Face cache (skipped without)",
 ]
 
 [tool.coverage.run]

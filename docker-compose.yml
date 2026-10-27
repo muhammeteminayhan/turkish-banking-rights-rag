@@ -1,0 +1,22 @@
+# Local services. `docker compose up -d db` starts PostgreSQL 18 with pgvector.
+# The host port is 5433 so it does not clash with another PostgreSQL on 5432.
+services:
+  db:
+    image: pgvector/pgvector:0.8.7-pg18
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-finhak}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-finhak}
+      POSTGRES_DB: ${POSTGRES_DB:-finhak}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      # PostgreSQL 18 images keep their data under /var/lib/postgresql/18/docker.
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:
