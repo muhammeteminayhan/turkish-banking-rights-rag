@@ -207,3 +207,26 @@ def test_the_quote_length_floor_is_inclusive() -> None:
     assert len(exact) == MIN_QUOTE_CHARS
     assert _kinds(_answer(_citation(quote=exact))) == []
     assert _kinds(_answer(_citation(quote=exact[:-1]))) == ["quote_too_short"]
+
+
+def test_a_citation_without_a_fikra_is_accepted_when_the_chunk_has_one() -> None:
+    # Qwen3 8B often leaves fikra empty. The label shown comes from the chunk, and the quote
+    # must still be in that fıkra, so nothing wrong reaches the user.
+    inferred = _citation(chunk_id="5411:m2:f2", doc_id="5411", madde="2", fikra=None,
+                         quote="Türkiye'de kurulu bankaları kapsar")  # fmt: skip
+
+    assert _kinds(_answer(_citation(fikra=None))) == []
+    assert _kinds(_answer(inferred)) == []
+
+
+def test_a_fikra_the_chunk_does_not_have_is_still_an_error() -> None:
+    citation = _citation(chunk_id="tcmb-ucret-talimat:s9:bc", doc_id="tcmb-ucret-talimat",
+                         madde="9", fikra=1, quote="EFT işlemlerinden alınacak ücret")  # fmt: skip
+
+    assert _kinds(_answer(citation)) == ["fikra_mismatch"]
+
+
+def test_the_unknown_chunk_message_points_to_the_chunk_id_lines() -> None:
+    report = verify_answer(_answer(_citation(chunk_id="6502:m99:f1")), RETRIEVED)
+
+    assert '"chunk_id:"' in report.errors[0].message  # the prompt has no brackets any more

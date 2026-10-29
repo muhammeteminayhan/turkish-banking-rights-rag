@@ -129,7 +129,7 @@ def _check(index: int, citation: CitationOut, by_id: dict[str, Chunk]) -> Citati
             "unknown_chunk",
             index,
             f"{where}: bu kimlikte bir kaynak verilmedi. "
-            "Yalnızca köşeli parantezdeki kimlikleri kullan.",
+            'Yalnızca kaynakların "chunk_id:" satırındaki kimlikleri kullan.',
         )
     if citation.doc_id != chunk.doc_id:
         return CitationError(
@@ -206,9 +206,11 @@ def _madde_key(madde: str | None) -> str | None:
 
 
 def _fikra_matches(cited: int | None, chunk: Chunk) -> bool:
-    if chunk.fikra is None:
-        return cited is None
+    # A missing fıkra is not a wrong one: the label shown comes from the chunk, and the quote
+    # must be in it. (Qwen3 8B often leaves it empty; decided after the M4 smoke runs.)
     if cited is None:
+        return True
+    if chunk.fikra is None:
         return False
     return chunk.fikra <= cited <= (chunk.fikra_last or chunk.fikra)
 

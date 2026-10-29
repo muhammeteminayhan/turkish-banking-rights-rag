@@ -1,7 +1,8 @@
 """Pick the provider from LLM_PROVIDER; fall back to Ollama, loudly, when Anthropic can't run.
 
 Settings come from the environment, then .env (finhak.config): LLM_PROVIDER (ollama |
-anthropic), ANTHROPIC_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_NUM_CTX, OLLAMA_THINK.
+anthropic), ANTHROPIC_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_NUM_CTX (8192),
+OLLAMA_THINK (on unless 0/false/no/off).
 """
 
 import logging
@@ -28,17 +29,21 @@ def make_ollama(env: Mapping[str, str]) -> LLMProvider:
         base_url=env.get("OLLAMA_BASE_URL") or ollama.DEFAULT_BASE_URL,
         model=env.get("OLLAMA_MODEL") or ollama.DEFAULT_MODEL,
         num_ctx=int(env.get("OLLAMA_NUM_CTX") or ollama.DEFAULT_NUM_CTX),
-        think=_flag(env, "OLLAMA_THINK"),
+        # On by default: in the M4 smoke runs 10 of 14 answers were right with thinking,
+        # 4 of 12 without (docs/milestones/M4.md).
+        think=_flag(env, "OLLAMA_THINK", default=True),
     )
 
 
-_ON, _OFF = ("1", "true", "yes", "on"), ("", "0", "false", "no", "off")
+_ON, _OFF = ("1", "true", "yes", "on"), ("0", "false", "no", "off")
 
 
-def _flag(env: Mapping[str, str], name: str) -> bool:
+def _flag(env: Mapping[str, str], name: str, default: bool) -> bool:
     value = (env.get(name) or "").strip().lower()
-    if value not in _ON + _OFF:  # a typo must not silently mean "off"
-        raise ValueError(f"{name} must be one of {_ON} or {_OFF[1:]}, not {value!r}")
+    if not value:
+        return default
+    if value not in _ON + _OFF:  # a typo must not silently pick one
+        raise ValueError(f"{name} must be one of {_ON} or {_OFF}, not {value!r}")
     return value in _ON
 
 

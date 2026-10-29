@@ -19,10 +19,10 @@ from finhak.llm.base import LLMOutputError as _OutputError
 
 DEFAULT_BASE_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "qwen3:8b"
-# 8 passages plus the instructions fit in 8k tokens (the longest smoke prompt: 6.2k) with
-# room for a plain answer. With thinking (num_predict 4096) a long prompt can fill the
-# window: that fails the FULL_CONTEXT check and is retried. A larger window costs VRAM
-# (~0.15 MB per token of KV cache) on an 8 GB GPU.
+# 8k is the largest window Ollama keeps wholly on the 8 GB GPU (5.9 GB; at 9k and 10k it
+# moved 0.5-0.7 GB to the CPU, and a 12k smoke run was ~2x slower). The longest smoke
+# prompt was 6.2k tokens and reasoning took up to ~1.3k: with thinking, prompt + reply can
+# still exceed 8k on a long prompt, which fails the FULL_CONTEXT check and is retried.
 DEFAULT_NUM_CTX = 8192
 MAX_OUTPUT = 1024  # tokens; an answer with a few quotes needs a few hundred
 MAX_OUTPUT_THINKING = 4096  # the reasoning counts against num_predict too
@@ -59,6 +59,10 @@ class OllamaProvider:
     @property
     def model(self) -> str:
         return self._model
+
+    @property
+    def num_ctx(self) -> int:
+        return self._num_ctx
 
     @property
     def sampling(self) -> dict[str, float]:

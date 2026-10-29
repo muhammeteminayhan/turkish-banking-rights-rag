@@ -22,7 +22,7 @@ from finhak.llm.base import (
     LLMUnavailable,
     json_schema,
 )
-from finhak.llm.ollama import OllamaProvider
+from finhak.llm.ollama import DEFAULT_NUM_CTX, OllamaProvider
 
 pytestmark = pytest.mark.unit
 
@@ -349,5 +349,7 @@ def test_ollama_thinking_mode_uses_its_own_sampling_and_a_larger_output_budget()
     assert body["options"]["top_p"] == 0.95
     assert body["options"]["num_predict"] > 1024
     assert provider.think is True
+    # 8k with thinking too: a larger window does not stay on an 8 GB GPU
+    assert body["options"]["num_ctx"] == DEFAULT_NUM_CTX
     sent = {k: body["options"][k] for k in ("temperature", "top_p", "top_k", "min_p", "seed")}
     assert provider.sampling == sent  # what the eval reports record

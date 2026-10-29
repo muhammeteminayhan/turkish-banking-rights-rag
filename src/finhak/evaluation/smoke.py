@@ -196,6 +196,7 @@ def render_smoke(rows: Sequence[SmokeRow], summary: dict[str, Any], context: dic
         f"- Provider: `{context.get('provider')}`, model `{context.get('model')}`; "
         f"retrieval config `{context.get('config', 'full')}`, retrieval models on "
         f"{context.get('retrieval_device')}; thinking: {context.get('think')}, "
+        f"num_ctx {context.get('num_ctx')}, "
         f"sampling {context.get('sampling')}.",
         f"- Questions: {summary['questions']}; status: {summary['status']}.",
         f"- Verified answers that cite an expected article: {summary['expected_article_cited']} "

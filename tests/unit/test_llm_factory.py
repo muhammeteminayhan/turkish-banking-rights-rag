@@ -72,11 +72,22 @@ def test_settings_reach_the_provider_factories() -> None:
     assert choice.provider.env["OLLAMA_MODEL"] == "qwen3:14b"
 
 
-def test_ollama_thinking_is_switched_on_from_the_environment() -> None:
+def test_ollama_thinks_unless_switched_off() -> None:
     from finhak.llm.factory import make_ollama
 
+    # decided after the smoke runs: 10 of 14 answers right with thinking, 4 of 12 without
+    assert make_ollama({}).think is True  # type: ignore[attr-defined]
+    assert make_ollama({"OLLAMA_THINK": ""}).think is True  # type: ignore[attr-defined]
+    assert make_ollama({"OLLAMA_THINK": "0"}).think is False  # type: ignore[attr-defined]
     assert make_ollama({"OLLAMA_THINK": "1"}).think is True  # type: ignore[attr-defined]
-    assert make_ollama({}).think is False  # type: ignore[attr-defined]
+
+
+def test_the_context_window_is_8k_unless_set() -> None:
+    from finhak.llm.factory import make_ollama
+    from finhak.llm.ollama import DEFAULT_NUM_CTX
+
+    assert make_ollama({}).num_ctx == DEFAULT_NUM_CTX == 8192  # type: ignore[attr-defined]
+    assert make_ollama({"OLLAMA_NUM_CTX": "4096"}).num_ctx == 4096  # type: ignore[attr-defined]
 
 
 def test_an_unknown_ollama_think_value_is_an_error() -> None:

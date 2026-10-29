@@ -108,6 +108,7 @@ def main(
         "config": args.config,
         "retrieval_device": device,
         "think": getattr(provider, "think", None),
+        "num_ctx": getattr(provider, "num_ctx", None),
         "sampling": getattr(provider, "sampling", None),
         "stopped": stopped,
     }
