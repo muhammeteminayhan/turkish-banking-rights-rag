@@ -97,3 +97,14 @@ def test_an_unknown_retrieval_device_is_a_settings_error(
     code, _, _ = _run(["Soru?"], ScriptedProvider(_reply([GOOD])))
 
     assert code == cli.EXIT_FAILED
+
+
+def test_json_output_never_contains_the_withheld_draft() -> None:
+    bad = _reply([{**GOOD, "quote": "bu cümle kaynakta hiç geçmiyor ama uzun"}])
+
+    code, out, _ = _run(["Soru?", "--json"], ScriptedProvider(bad, bad))
+
+    data = json.loads(out)
+    assert (code, data["status"]) == (cli.EXIT_OK, "unverified")
+    assert "withheld_draft" not in data
+    assert bad["answer"] not in out

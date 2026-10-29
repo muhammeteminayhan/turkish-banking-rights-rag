@@ -297,3 +297,36 @@ def test_an_error_row_records_how_long_the_failed_question_took(
     rows = run_smoke(QUESTIONS[:1], ask)
 
     assert rows[0].latency_ms == 300_000.0
+
+
+def test_a_withheld_draft_is_kept_in_the_row_but_never_rendered() -> None:
+    withheld = replace(_result("unverified", [], errors=("x",)), withheld_draft="Taslak cevap.")
+
+    rows = run_smoke(QUESTIONS[3:], lambda q: withheld)
+
+    assert rows[0].withheld_draft == "Taslak cevap."
+    assert "Taslak cevap." not in rows[0].rendered
+
+
+def test_the_all_option_answers_every_golden_question_into_an_e2e_folder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    golden = tmp_path / "g.jsonl"
+    golden.write_text("".join(q.model_dump_json() + "\n" for q in QUESTIONS), encoding="utf-8")
+    monkeypatch.setattr(smoke_cli, "connect", lambda url: nullcontext())
+    monkeypatch.setattr(smoke_cli, "open_retrieval", lambda conn, config, device: object())
+    monkeypatch.setattr(smoke_cli, "answer_question", lambda q, *a, **k: ANSWERS[q])
+    monkeypatch.setenv("RETRIEVAL_DEVICE", "cpu")
+    out_dir = tmp_path / "results"
+    fake = SimpleNamespace(name="fake", model="fake-1")
+
+    code = smoke_cli.main(
+        ["--golden", str(golden), "--all", "--out-dir", str(out_dir)],
+        provider_factory=lambda: fake,  # type: ignore[arg-type,return-value]
+    )
+
+    assert code == smoke_cli.EXIT_OK
+    (folder,) = out_dir.glob("*_e2e")
+    rows = (folder / "rows.jsonl").read_text(encoding="utf-8").splitlines()
+    assert len(rows) == len(QUESTIONS)
+    assert (folder / "report.md").read_text(encoding="utf-8").startswith("# End-to-end run")

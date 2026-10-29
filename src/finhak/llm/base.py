@@ -45,6 +45,11 @@ class LLMUnavailable(LLMError):
     """The provider cannot be used: not reachable, not installed or no credentials."""
 
 
+class LLMRateLimited(LLMError):
+    """A quota or rate limit was still hit after waiting: try again later (a free tier's
+    daily cap, for example)."""
+
+
 class LLMOutputError(LLMError):
     """The reply is not valid JSON for the schema, was cut off, or filled the context."""
 

@@ -1,8 +1,8 @@
 """Pick the provider from LLM_PROVIDER; fall back to Ollama, loudly, when Anthropic can't run.
 
 Settings come from the environment, then .env (finhak.config): LLM_PROVIDER (ollama |
-anthropic), ANTHROPIC_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_NUM_CTX (8192),
-OLLAMA_THINK (on unless 0/false/no/off).
+anthropic | gemini), ANTHROPIC_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_NUM_CTX (8192),
+OLLAMA_THINK (on unless 0/false/no/off), GEMINI_API_KEY, GEMINI_MODEL, GEMINI_RPM.
 """
 
 import logging
@@ -10,7 +10,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
 from finhak.config import merged_env
-from finhak.llm import anthropic_provider, ollama
+from finhak.llm import anthropic_provider, gemini, ollama
 from finhak.llm.base import LLMProvider, LLMUnavailable
 
 logger = logging.getLogger("finhak.llm")
@@ -56,6 +56,16 @@ def make_anthropic(env: Mapping[str, str]) -> LLMProvider:
     )
 
 
+def make_gemini(env: Mapping[str, str]) -> LLMProvider:
+    """Gemini's free tier (a key from a Google project without billing): costs nothing."""
+    rpm = env.get("GEMINI_RPM")
+    return gemini.GeminiProvider(
+        api_key=env.get("GEMINI_API_KEY") or "",
+        model=env.get("GEMINI_MODEL") or gemini.DEFAULT_MODEL,
+        rpm=float(rpm) if rpm else gemini.DEFAULT_RPM,
+    )
+
+
 def choose_provider(
     environ: Mapping[str, str] | None = None,
     has_credentials: Callable[[Mapping[str, str]], bool] = (
@@ -63,13 +73,21 @@ def choose_provider(
     ),
     make_anthropic: ProviderFactory = make_anthropic,
     make_ollama: ProviderFactory = make_ollama,
+    make_gemini: ProviderFactory = make_gemini,
 ) -> ProviderChoice:
     env = merged_env() if environ is None else environ
     wanted = (env.get("LLM_PROVIDER") or "ollama").strip().lower()
     if wanted == "ollama":
         return ProviderChoice(make_ollama(env), None)
+    if wanted == "gemini":
+        try:
+            return ProviderChoice(make_gemini(env), None)
+        except LLMUnavailable as exc:
+            notice = f"LLM_PROVIDER=gemini but Gemini cannot be used ({exc}); using Ollama."
+            logger.warning("%s", notice)
+            return ProviderChoice(make_ollama(env), notice)
     if wanted != "anthropic":
-        raise ValueError(f"LLM_PROVIDER must be ollama or anthropic, got {wanted!r}")
+        raise ValueError(f"LLM_PROVIDER must be ollama, anthropic or gemini, got {wanted!r}")
 
     if not has_credentials(env):
         notice = (

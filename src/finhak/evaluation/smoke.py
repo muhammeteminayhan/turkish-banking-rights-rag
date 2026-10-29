@@ -47,6 +47,7 @@ class SmokeRow:
     output_tokens: int = 0
     cost_usd: float | None = 0.0
     rendered: str = ""  # the answer as the user sees it (citations, dates, disclaimer)
+    withheld_draft: str = ""  # an unverified answer, kept for the error analysis only
 
 
 class SmokeStopped(RuntimeError):
@@ -115,6 +116,7 @@ def _answered_row(question: GoldenQuestion, result: AnswerResult) -> SmokeRow:
         output_tokens=result.usage.output_tokens,
         cost_usd=result.cost_usd,
         rendered=render_answer(result),
+        withheld_draft=result.withheld_draft,
     )
 
 
@@ -127,9 +129,9 @@ def _log_progress(number: int, total: int, row: SmokeRow) -> None:
     )  # fmt: skip
 
 
-def render_answers(rows: Sequence[SmokeRow]) -> str:
+def render_answers(rows: Sequence[SmokeRow], title: str = "Smoke answers (M4)") -> str:
     """Every question with its full answer, for reading by hand."""
-    lines = ["# Smoke answers (M4)", ""]
+    lines = [f"# {title}", ""]
     for row in rows:
         lines += [
             f"## {row.question_id} · {row.category} · {row.status}",
@@ -191,7 +193,7 @@ def summarize_smoke(rows: Sequence[SmokeRow]) -> dict[str, Any]:
 
 def render_smoke(rows: Sequence[SmokeRow], summary: dict[str, Any], context: dict[str, Any]) -> str:
     lines = [
-        "# Smoke run (M4)",
+        f"# {context.get('title', 'Smoke run (M4)')}",
         "",
         f"- Provider: `{context.get('provider')}`, model `{context.get('model')}`; "
         f"retrieval config `{context.get('config', 'full')}`, retrieval models on "

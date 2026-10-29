@@ -263,3 +263,14 @@ def test_the_shown_quote_is_the_source_span() -> None:
     result = _ask(ScriptedProvider(_reply([shouted])))
 
     assert result.citations[0].quote == "ödemenin üç aydan daha uzun süre ertelenmesi"
+
+
+def test_a_withheld_answer_keeps_its_last_draft_for_evaluation_only() -> None:
+    bad = _reply([{**GOOD, "quote": "bu cümle kaynakta hiç geçmiyor ama uzun"}])
+
+    withheld = _ask(ScriptedProvider(bad, bad))
+    answered = _ask(ScriptedProvider(_reply([GOOD])))
+
+    assert withheld.withheld_draft == bad["answer"]  # for the error analysis of M5
+    assert withheld.answer == UNVERIFIED_MESSAGE  # what the user sees does not change
+    assert answered.withheld_draft == ""

@@ -21,11 +21,17 @@ def _choose(environ: dict[str, str], credentials: bool = True, sdk: bool = True)
             raise LLMUnavailable("the Anthropic SDK is not installed")
         return Named("anthropic", env)
 
+    def make_gemini(env: Mapping[str, str]) -> Named:
+        if not env.get("GEMINI_API_KEY"):
+            raise LLMUnavailable("GEMINI_API_KEY is not set")
+        return Named("gemini", env)
+
     return choose_provider(
         environ,
         has_credentials=lambda env: credentials,
         make_anthropic=make_anthropic,  # type: ignore[arg-type]
         make_ollama=lambda env: Named("ollama", env),  # type: ignore[arg-type]
+        make_gemini=make_gemini,  # type: ignore[arg-type]
     )
 
 
@@ -96,3 +102,24 @@ def test_an_unknown_ollama_think_value_is_an_error() -> None:
     with pytest.raises(ValueError, match="OLLAMA_THINK"):
         make_ollama({"OLLAMA_THINK": "ture"})
     assert make_ollama({"OLLAMA_THINK": "false"}).think is False  # type: ignore[attr-defined]
+
+
+def test_gemini_is_used_with_a_key_and_falls_back_to_ollama_without_one() -> None:
+    with_key = _choose({"LLM_PROVIDER": "gemini", "GEMINI_API_KEY": "k"})
+    without = _choose({"LLM_PROVIDER": "gemini"})
+
+    assert (with_key.provider.name, with_key.notice) == ("gemini", None)
+    assert without.provider.name == "ollama"
+    assert "GEMINI_API_KEY" in without.notice
+
+
+def test_make_gemini_reads_the_key_model_and_rate_from_the_settings() -> None:
+    from finhak.llm.factory import make_gemini
+    from finhak.llm.gemini import DEFAULT_MODEL
+
+    provider = make_gemini({"GEMINI_API_KEY": "k", "GEMINI_RPM": "12"})
+
+    assert provider.model == DEFAULT_MODEL
+    assert provider.min_interval == 5.0  # type: ignore[attr-defined]
+    with pytest.raises(LLMUnavailable, match="GEMINI_API_KEY"):
+        make_gemini({})

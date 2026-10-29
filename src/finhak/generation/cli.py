@@ -105,8 +105,11 @@ def main(
         except (ModelLoadError, IndexMismatch, LLMError, psycopg.Error) as exc:
             logger.error("%s", exc)
             return EXIT_FAILED
-    out.write(json.dumps(asdict(result), ensure_ascii=False, indent=2) + "\n" if args.json
-              else render_answer(result))  # fmt: skip
+    if args.json:  # the withheld draft is for evaluation only: never shown
+        shown = {k: v for k, v in asdict(result).items() if k != "withheld_draft"}
+        out.write(json.dumps(shown, ensure_ascii=False, indent=2) + "\n")
+    else:
+        out.write(render_answer(result))
     return EXIT_OK
 
 

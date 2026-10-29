@@ -49,7 +49,9 @@ EXIT_OK, EXIT_FAILED = 0, 1
 def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--golden", type=Path, default=Path("eval/golden.jsonl"))
-    parser.add_argument("--ids", type=Path, default=Path("eval/smoke.txt"))
+    which = parser.add_mutually_exclusive_group()
+    which.add_argument("--ids", type=Path, default=Path("eval/smoke.txt"))
+    which.add_argument("--all", action="store_true", help="every question of --golden (the M5 run)")
     parser.add_argument("--config", choices=list(CONFIGS), default=DEFAULT_CONFIG)
     parser.add_argument("--out-dir", type=Path, default=Path("eval/results"))
     parser.add_argument("--database-url", default=None, help="default: DATABASE_URL")
@@ -66,7 +68,7 @@ def main(
         logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     try:
         by_id = {q.id: q for q in load_golden(args.golden)}
-        ids = load_smoke_ids(args.ids)
+        ids = list(by_id) if args.all else load_smoke_ids(args.ids)
     except (GoldenError, OSError) as exc:
         logger.error("%s", exc)
         return EXIT_FAILED
@@ -112,9 +114,19 @@ def main(
         "sampling": getattr(provider, "sampling", None),
         "stopped": stopped,
     }
-    folder = args.out_dir / f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}_smoke"
+    kind = "e2e" if args.all else "smoke"
+    folder = args.out_dir / f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}_{kind}"
+    titles = (
+        ("End-to-end run (M5)", "End-to-end answers (M5)")
+        if args.all
+        else (
+            "Smoke run (M4)",
+            "Smoke answers (M4)",
+        )
+    )
+    context["title"] = titles[0]
     atomic_write_text(folder / "report.md", render_smoke(rows, summary, context))
-    atomic_write_text(folder / "answers.md", render_answers(rows))
+    atomic_write_text(folder / "answers.md", render_answers(rows, titles[1]))
     atomic_write_text(
         folder / "rows.jsonl",
         "".join(json.dumps(asdict(row), ensure_ascii=False) + "\n" for row in rows),

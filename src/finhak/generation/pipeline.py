@@ -62,6 +62,9 @@ class AnswerResult:
     model: str
     latency_ms: float
     top_score: float | None = None  # the best retrieval score (reranker scale with rerank)
+    # The last answer that failed verification. For evaluation only: never rendered or
+    # shown to a user (they get UNVERIFIED_MESSAGE).
+    withheld_draft: str = ""
     disclaimer: str = DISCLAIMER
 
 
@@ -71,6 +74,7 @@ class _Attempts:
     parsed: AnswerOut | None = None
     cited: dict[str, Chunk] = field(default_factory=dict)
     quotes: tuple[str, ...] = ()
+    draft: str = ""  # the last answer that failed verification
     attempts: int = 0
     errors: tuple[str, ...] = ()
     usage: Usage = field(default_factory=Usage)
@@ -120,6 +124,7 @@ def answer_question(
             model=run.model,
             latency_ms=round((clock() - started) * 1000, 1),
             top_score=outcome.results[0].score if outcome.results else None,
+            withheld_draft=run.draft if status == "unverified" else "",
         )
 
     if not shown:
@@ -158,6 +163,7 @@ def _generate(provider: LLMProvider, prompt: str, question: str, shown: list[Chu
             run.errors = ()
             return run
         run.errors = tuple(error.message for error in report.errors)
+        run.draft = reply.parsed.answer
         messages = [
             *messages,
             ChatMessage("assistant", reply.raw),
