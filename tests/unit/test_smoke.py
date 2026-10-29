@@ -142,12 +142,23 @@ def test_smoke_command_stops_when_the_model_or_the_questions_are_missing(tmp_pat
     assert smoke_cli.main(args, provider_factory=unavailable) == smoke_cli.EXIT_FAILED
 
 
-def test_the_real_smoke_ids_exist_in_the_draft_batch() -> None:
+def test_the_real_smoke_ids_exist_in_the_golden_set() -> None:
     ids = load_smoke_ids(ROOT / "eval" / "smoke.txt")
-    known = {q.id for q in load_golden(ROOT / "eval" / "drafts" / "batch1.jsonl")}
+    known = {q.id for q in load_golden(ROOT / "eval" / "golden.jsonl")}
 
     assert len(ids) == 20
     assert set(ids) <= known
+
+
+def test_the_golden_set_holds_only_approved_questions() -> None:
+    questions = load_golden(ROOT / "eval" / "golden.jsonl")
+
+    assert questions and all(q.status == "approved" for q in questions)
+    assert len({q.id for q in questions}) == len(questions)
+
+
+def test_the_smoke_command_reads_the_approved_golden_set_by_default() -> None:
+    assert smoke_cli.parse_args([]).golden == Path("eval/golden.jsonl")
 
 
 def test_a_failing_question_becomes_an_error_row_not_a_lost_run() -> None:

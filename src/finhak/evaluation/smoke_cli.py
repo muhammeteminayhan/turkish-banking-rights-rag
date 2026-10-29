@@ -1,7 +1,7 @@
 """Run the M4 smoke set end to end and write a report.
 
-    python eval/smoke_ask.py                      # eval/smoke.txt ids from the draft batch
-    python eval/smoke_ask.py --golden eval/golden.jsonl
+    python eval/smoke_ask.py                      # eval/smoke.txt ids from eval/golden.jsonl
+    python eval/smoke_ask.py --golden eval/drafts/batch2.jsonl --ids my_ids.txt
 
 Needs PostgreSQL with the index, the models and a reachable LLM (Ollama by default).
 Writes eval/results/<date>_<time>_smoke/ with report.md, answers.md and rows.jsonl.
@@ -48,7 +48,7 @@ EXIT_OK, EXIT_FAILED = 0, 1
 
 def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    parser.add_argument("--golden", type=Path, default=Path("eval/drafts/batch1.jsonl"))
+    parser.add_argument("--golden", type=Path, default=Path("eval/golden.jsonl"))
     parser.add_argument("--ids", type=Path, default=Path("eval/smoke.txt"))
     parser.add_argument("--config", choices=list(CONFIGS), default=DEFAULT_CONFIG)
     parser.add_argument("--out-dir", type=Path, default=Path("eval/results"))

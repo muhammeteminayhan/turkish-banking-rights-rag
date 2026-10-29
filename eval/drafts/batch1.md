@@ -1,4 +1,6 @@
-# Golden set — 1. parti (taslak, onayını bekliyor)
+# Golden set — 1. parti (**onaylandı**, 2026-10-29)
+
+Kullanıcı 64 sorunun hepsini, kontrol işaretli 8'i dahil, olduğu gibi onayladı. Onaylı hâli `eval/golden.jsonl`.
 
 `batch1.jsonl` içindeki 64 sorunun okunabilir hâli. Onaylanan sorular `status: approved` ile `eval/golden.jsonl`'a taşınır; M3'ün nihai metrikleri yalnızca onaylı sorularla hesaplanır.
 
