@@ -70,3 +70,18 @@ def test_settings_reach_the_provider_factories() -> None:
     choice = _choose({"OLLAMA_MODEL": "qwen3:14b", "OLLAMA_BASE_URL": "http://gpu:11434"})
 
     assert choice.provider.env["OLLAMA_MODEL"] == "qwen3:14b"
+
+
+def test_ollama_thinking_is_switched_on_from_the_environment() -> None:
+    from finhak.llm.factory import make_ollama
+
+    assert make_ollama({"OLLAMA_THINK": "1"}).think is True  # type: ignore[attr-defined]
+    assert make_ollama({}).think is False  # type: ignore[attr-defined]
+
+
+def test_an_unknown_ollama_think_value_is_an_error() -> None:
+    from finhak.llm.factory import make_ollama
+
+    with pytest.raises(ValueError, match="OLLAMA_THINK"):
+        make_ollama({"OLLAMA_THINK": "ture"})
+    assert make_ollama({"OLLAMA_THINK": "false"}).think is False  # type: ignore[attr-defined]

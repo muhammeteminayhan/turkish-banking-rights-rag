@@ -2,7 +2,13 @@ from pathlib import Path
 
 import pytest
 
-from finhak.config import DEFAULT_DATABASE_URL, database_url, merged_env, read_env_file
+from finhak.config import (
+    DEFAULT_DATABASE_URL,
+    database_url,
+    merged_env,
+    read_env_file,
+    retrieval_device,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -51,3 +57,15 @@ def test_merged_env_lets_set_variables_win_over_the_env_file(tmp_path: Path) -> 
 def test_the_default_matches_docker_compose(tmp_path: Path) -> None:
     assert database_url({}, tmp_path / "missing.env") == DEFAULT_DATABASE_URL
     assert DEFAULT_DATABASE_URL.endswith("@127.0.0.1:5433/finhak")
+
+
+def test_retrieval_models_run_on_the_cpu_unless_told_otherwise(tmp_path: Path) -> None:
+    missing = tmp_path / "none.env"
+
+    assert retrieval_device({}, missing) == "cpu"  # the language model needs the GPU
+    assert retrieval_device({"RETRIEVAL_DEVICE": "CUDA"}, missing) == "cuda"
+    with pytest.raises(ValueError, match="RETRIEVAL_DEVICE"):
+        retrieval_device({"RETRIEVAL_DEVICE": "gpu"}, missing)
+    blank = tmp_path / "blank.env"
+    blank.write_text("RETRIEVAL_DEVICE=\n", encoding="utf-8")
+    assert retrieval_device({}, blank) == "cpu"  # like the other settings

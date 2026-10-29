@@ -16,8 +16,9 @@ atıflar üzerinden kontrol edilecek.
 Kurallar:
 1. Yalnızca "Kaynaklar" bölümündeki metinleri kullan. Kendi bilgini, tahmini veya orada \
 olmayan bir mevzuatı ekleme.
-2. Her iddiayı en az bir atıfla destekle. Atıfta chunk_id, doc_id, madde ve fıkra \
-değerlerini kaynağın başlığında yazdığı gibi aynen kopyala; fıkra "null" ise null ver.
+2. Her iddiayı en az bir atıfla destekle. chunk_id alanına kaynağın "chunk_id:" \
+satırındaki değeri aynen yaz (ör. 6502:m22:f1; yalnızca belge kimliği değil). doc_id, \
+madde ve fıkra değerlerini de o kaynağın satırından aynen kopyala; fıkra "null" ise null ver.
 3. quote alanına kaynak metinden, iddiayı destekleyen bölümü birebir kopyala: en az \
 birkaç kelime, kelime değiştirmeden, kısaltmadan, özetlemeden.
 4. Kaynaklar soruyu cevaplamıyorsa out_of_scope true olsun, citations boş liste olsun ve \
@@ -26,10 +27,16 @@ answer alanında bunu tek cümleyle söyle.
 kaynakla düzelt.
 6. Kaynaklar birbirleriyle çelişiyorsa ikisini de atıfla göster; hangisinin uygulanacağı \
 kaynakta yazmıyorsa karar verme, bunu belirt.
-7. Tutarları, oranları ve süreleri kaynakta yazdığı gibi ver; hesaplayıp yeni rakam üretme.
-8. Hukuki tavsiye verme: kişinin ne yapması gerektiğini değil, metnin ne dediğini anlat. \
-Uyarı cümlesi ekleme; sistem ekliyor.
-9. Cevabı Türkçe, kısa ve sade yaz.
+7. Tutarları, oranları ve süreleri kaynakta yazdığı gibi ver; hesaplayıp yeni rakam üretme. \
+Bir kaynağın Notlar bölümündeki dipnot, metindeki tutarın belirli bir tarihten itibaren \
+geçerli güncel hâlini veriyorsa güncel tutarı ve o tarihi ver.
+8. Kaynak bir şeyi yasaklıyorsa ("reddedilemez", "alınamaz", "artıramaz", "geçemez"), \
+cevapta bunu ters çevirme: yasak olanı "yapılabilir" diye yazma.
+9. Her hükmü yalnızca kendi konusu için kullan: konut finansmanına, kredi kartına veya \
+mesafeli sözleşmeye ait bir kuralı başka bir ürüne uygulama.
+10. Kişinin ne yapması gerektiğini değil, metnin ne dediğini anlat. Cevaba sorumluluk \
+reddi, uyarı veya "hukuki tavsiye değildir" türünden bir cümle yazma.
+11. Cevabı Türkçe, kısa ve sade yaz.
 """
 
 # Eight passages of at most this length plus the instructions stay under ~6k tokens, inside
@@ -46,7 +53,7 @@ INVALID_OUTPUT_RETRY = (
 
 def passage_block(chunk: Chunk) -> str:
     lines = [
-        f"[{chunk.id}]",
+        f"chunk_id: {chunk.id}",
         f"Belge: {chunk.doc_label}",
         f"doc_id: {chunk.doc_id} | madde: {chunk.madde or 'null'} | fıkra: {_fikra(chunk)}",
     ]
@@ -111,4 +118,9 @@ def _fikra(chunk: Chunk) -> str:
         value = f"{chunk.fikra}-{chunk.fikra_last} (bu aralıktan tek bir sayı yaz)"
     else:
         value = str(chunk.fikra)
-    return f"{value} (metinde yazmıyor, sayıldı)" if chunk.fikra_inferred else value
+    if chunk.fikra_inferred:  # the model wrote null for "not printed" in the first smoke run
+        return (
+            f"{value} (numara metinde yazmıyor, paragraflar sayılarak bulundu; "
+            f"atıfta {chunk.fikra} yaz)"
+        )
+    return value

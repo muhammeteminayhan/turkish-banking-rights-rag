@@ -19,11 +19,20 @@ from finhak.llm.base import LLMOutputError as _OutputError
 
 DEFAULT_BASE_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "qwen3:8b"
-# 8 passages plus the instructions fit in 8k tokens; a larger window costs VRAM that the
-# embedder and the reranker share on an 8 GB GPU.
+# 8 passages plus the instructions fit in 8k tokens (the longest smoke prompt: 6.2k) with
+# room for a plain answer. With thinking (num_predict 4096) a long prompt can fill the
+# window: that fails the FULL_CONTEXT check and is retried. A larger window costs VRAM
+# (~0.15 MB per token of KV cache) on an 8 GB GPU.
 DEFAULT_NUM_CTX = 8192
 MAX_OUTPUT = 1024  # tokens; an answer with a few quotes needs a few hundred
+MAX_OUTPUT_THINKING = 4096  # the reasoning counts against num_predict too
 FULL_CONTEXT = 0.95  # share of num_ctx at which the prompt may have been cut
+# Qwen3's recommended sampling (its model card advises against greedy decoding, which
+# repeats itself: the first smoke run hit num_predict on one question). Seeded so a run can
+# be reproduced.
+SAMPLING = {"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0.0}
+SAMPLING_THINKING = {"temperature": 0.6, "top_p": 0.95, "top_k": 20, "min_p": 0.0}
+SEED = 42
 
 
 class OllamaProvider:
@@ -34,10 +43,12 @@ class OllamaProvider:
         timeout: float = 300.0,
         num_ctx: int = DEFAULT_NUM_CTX,
         transport: httpx.BaseTransport | None = None,
+        think: bool = False,
     ) -> None:
         self._base_url = base_url.rstrip("/")
         self._model = model
         self._num_ctx = num_ctx
+        self.think = think  # Qwen3 reasons before answering; slower, may be more careful
         self._timeout = timeout
         self._client = httpx.Client(base_url=self._base_url, timeout=timeout, transport=transport)
 
@@ -49,17 +60,21 @@ class OllamaProvider:
     def model(self) -> str:
         return self._model
 
+    @property
+    def sampling(self) -> dict[str, float]:
+        """The decoding options sent with every request (recorded with eval runs)."""
+        return {**(SAMPLING_THINKING if self.think else SAMPLING), "seed": SEED}
+
     def generate(
         self, system: str, messages: Sequence[ChatMessage], schema: type[T]
     ) -> LLMResult[T]:
+        limit = MAX_OUTPUT_THINKING if self.think else MAX_OUTPUT
         body = {
             "model": self._model,
             "stream": False,
-            "think": False,  # Qwen3 would otherwise reason before the JSON
+            "think": self.think,  # the reasoning comes back apart from the JSON content
             "format": json_schema(schema),
-            # num_predict: a greedy (temperature 0) loop would otherwise run to the end of
-            # the context window.
-            "options": {"temperature": 0, "num_ctx": self._num_ctx, "num_predict": MAX_OUTPUT},
+            "options": {**self.sampling, "num_ctx": self._num_ctx, "num_predict": limit},
             "messages": [
                 {"role": "system", "content": system},
                 *({"role": m.role, "content": m.content} for m in messages),
@@ -68,7 +83,7 @@ class OllamaProvider:
         data = self._post("/api/chat", body)
         usage = Usage(int(data.get("prompt_eval_count", 0)), int(data.get("eval_count", 0)))
         if data.get("done_reason") == "length":
-            raise _OutputError(f"reply cut off at {MAX_OUTPUT} tokens", usage=usage)
+            raise _OutputError(f"reply cut off at {limit} tokens", usage=usage)
         # Ollama silently drops the start of a prompt that does not fit; a context this full
         # means the model may not have seen every passage or rule.
         if usage.input_tokens + usage.output_tokens >= FULL_CONTEXT * self._num_ctx:

@@ -23,6 +23,7 @@ class ModelLoadError(RuntimeError):
 
 
 LOAD_HINT = "install the models extra (pip install -e .[models]) and download the model first"
+DEVICE_HINT = "RETRIEVAL_DEVICE=cpu runs it on the CPU"
 
 
 @dataclass(frozen=True)
@@ -105,6 +106,11 @@ class SentenceTransformerEmbedder:
             )
         except (ImportError, OSError, ValueError) as exc:
             raise ModelLoadError(f"cannot load {model.name}: {exc}; {LOAD_HINT}") from exc
+        except (RuntimeError, AssertionError) as exc:  # no CUDA in torch, or the GPU is full
+            raise ModelLoadError(
+                f"cannot load {model.name} on {device or 'the default device'}: {exc}; "
+                f"{DEVICE_HINT}"
+            ) from exc
         self._model.max_seq_length = max_seq_length
         self._ref = model
         self._batch_size = batch_size

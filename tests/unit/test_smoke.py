@@ -1,15 +1,25 @@
+import itertools
+import logging
+from contextlib import nullcontext
 from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
-from finhak.evaluation import smoke_cli
+from finhak.evaluation import smoke, smoke_cli
 from finhak.evaluation.golden import GoldenQuestion, load_golden
-from finhak.evaluation.smoke import load_smoke_ids, render_smoke, run_smoke, summarize_smoke
+from finhak.evaluation.smoke import (
+    SmokeStopped,
+    load_smoke_ids,
+    render_smoke,
+    run_smoke,
+    summarize_smoke,
+)
 from finhak.generation.cli import render_answer
 from finhak.generation.pipeline import AnswerResult, AnswerStatus
 from finhak.generation.render import DISCLAIMER, RenderedCitation
-from finhak.llm.base import LLMProvider, LLMUnavailable, Usage
+from finhak.llm.base import LLMError, LLMProvider, LLMUnavailable, Usage
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -74,9 +84,11 @@ def test_smoke_summary_counts_outcomes() -> None:
 def test_smoke_report_is_markdown_with_one_row_per_question() -> None:
     rows = run_smoke(QUESTIONS, lambda q: ANSWERS[q])
 
-    report = render_smoke(rows, summarize_smoke(rows), {"provider": "fake", "model": "fake-1"})
+    context = {"provider": "fake", "model": "fake-1", "sampling": {"temperature": 0.0}}
+    report = render_smoke(rows, summarize_smoke(rows), context)
 
     assert report.startswith("# Smoke run")
+    assert "sampling {'temperature': 0.0}" in report  # runs differ by it
     assert report.count("\n| q") == 4
     assert "madde 10, 11 değil" in report
 
@@ -153,6 +165,68 @@ def test_a_failing_question_becomes_an_error_row_not_a_lost_run() -> None:
     assert summary["tokens"]["input"] == 10 + 7 + 10 + 10
 
 
+def test_the_run_stops_when_the_model_fails_on_two_questions_in_a_row() -> None:
+    def ask(question: str) -> AnswerResult:  # e.g. Ollama timing out on a full GPU
+        raise LLMError("Ollama did not answer within 300 s")
+
+    with pytest.raises(SmokeStopped) as stopped:
+        run_smoke(QUESTIONS, ask)
+
+    assert [r.status for r in stopped.value.rows] == ["error", "error"]
+    assert "2 questions in a row" in str(stopped.value)
+
+
+def test_errors_with_answers_in_between_do_not_stop_the_run() -> None:
+    def ask(question: str) -> AnswerResult:
+        if question in ("Soru q1?", "Soru q3?"):
+            raise LLMError("cut off")
+        return ANSWERS[question]
+
+    rows = run_smoke(QUESTIONS, ask)
+
+    assert [r.status for r in rows] == ["error", "answered", "error", "unverified"]
+
+
+def test_each_question_is_logged_as_it_finishes(caplog: pytest.LogCaptureFixture) -> None:
+    with caplog.at_level(logging.INFO, logger="finhak.smoke"):
+        run_smoke(QUESTIONS, lambda q: ANSWERS[q])
+
+    lines = [record.getMessage() for record in caplog.records]
+    assert len(lines) == 4
+    assert lines[0].startswith("1/4 q1 answered in 1 s")
+
+
+def test_a_stopped_smoke_command_keeps_the_partial_report_and_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    golden = tmp_path / "g.jsonl"
+    golden.write_text("".join(q.model_dump_json() + "\n" for q in QUESTIONS), encoding="utf-8")
+    ids = tmp_path / "ids.txt"
+    ids.write_text("q1\nq2\nq3\n", encoding="utf-8")
+
+    def timing_out(*args: object, **kwargs: object) -> AnswerResult:
+        raise LLMError("Ollama did not answer within 300 s")
+
+    monkeypatch.setattr(smoke_cli, "connect", lambda url: nullcontext())
+    monkeypatch.setattr(smoke_cli, "open_retrieval", lambda conn, config, device: object())
+    monkeypatch.setenv("RETRIEVAL_DEVICE", "cpu")
+    monkeypatch.setattr(smoke_cli, "answer_question", timing_out)
+    fake = SimpleNamespace(name="fake", model="fake-1")
+    out_dir = tmp_path / "results"
+
+    code = smoke_cli.main(
+        ["--golden", str(golden), "--ids", str(ids), "--out-dir", str(out_dir)],
+        provider_factory=lambda: fake,  # type: ignore[arg-type,return-value]
+    )
+
+    assert code == smoke_cli.EXIT_FAILED
+    (report,) = out_dir.glob("*_smoke/report.md")
+    text = report.read_text(encoding="utf-8")
+    assert "Stopped early" in text
+    assert "retrieval models on cpu" in text
+    assert text.count("\n| q") == 2
+
+
 def test_the_summary_separates_retrieval_and_generation_misses() -> None:
     summary = summarize_smoke(run_smoke(QUESTIONS, lambda q: ANSWERS[q]))
 
@@ -160,3 +234,55 @@ def test_the_summary_separates_retrieval_and_generation_misses() -> None:
     assert summary["verified_on_first_try"] == "2/2"
     assert summary["false_refusals"] == "0/3"
     assert summary["cost_usd"] == 0.0
+
+
+def test_the_rendered_answers_are_kept_for_reading() -> None:
+    from finhak.evaluation.smoke import render_answers
+
+    rows = run_smoke(QUESTIONS, lambda q: ANSWERS[q])
+
+    text = render_answers(rows)
+
+    assert DISCLAIMER in rows[0].rendered
+    assert text.startswith("# Smoke answers")
+    assert text.count("\n## ") == 4
+    assert "## q1 · dogrudan · answered" in text
+    assert "Soru q1?" in text
+
+
+def test_two_errors_on_the_last_questions_end_the_run_normally() -> None:
+    def ask(question: str) -> AnswerResult:
+        if question in ("Soru q3?", "Soru q4?"):
+            raise LLMError("cut off")
+        return ANSWERS[question]
+
+    rows = run_smoke(QUESTIONS, ask)  # every question ran: nothing was cut short
+
+    assert [r.status for r in rows] == ["answered", "answered", "error", "error"]
+
+
+def test_an_interrupted_run_keeps_the_questions_that_ran() -> None:
+    def ask(question: str) -> AnswerResult:
+        if question == "Soru q3?":
+            raise KeyboardInterrupt  # Ctrl-C on a slow run
+        return ANSWERS[question]
+
+    with pytest.raises(SmokeStopped) as stopped:
+        run_smoke(QUESTIONS, ask)
+
+    assert [r.question_id for r in stopped.value.rows] == ["q1", "q2"]
+    assert "interrupted" in str(stopped.value)
+
+
+def test_an_error_row_records_how_long_the_failed_question_took(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ticks = itertools.count(0.0, 300.0)  # each reading of the clock is 300 s later
+    monkeypatch.setattr(smoke, "time", SimpleNamespace(perf_counter=lambda: next(ticks)))
+
+    def ask(question: str) -> AnswerResult:
+        raise LLMError("Ollama did not answer within 300 s")
+
+    rows = run_smoke(QUESTIONS[:1], ask)
+
+    assert rows[0].latency_ms == 300_000.0

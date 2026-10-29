@@ -86,7 +86,10 @@ def test_ollama_sends_schema_no_thinking_and_parses_the_reply() -> None:
     assert body["think"] is False
     assert body["stream"] is False
     assert body["format"] == json_schema(Out)
-    assert body["options"]["temperature"] == 0
+    # Qwen3's recommended non-thinking sampling (greedy decoding loops), seeded
+    assert body["options"]["temperature"] == 0.7
+    assert (body["options"]["top_p"], body["options"]["top_k"]) == (0.8, 20)
+    assert body["options"]["seed"] == 42
     assert body["messages"] == [
         {"role": "system", "content": "Sistem."},
         {"role": "user", "content": "Soru?"},
@@ -325,3 +328,26 @@ def test_credentials_come_from_the_environment_or_an_ant_profile(
         return types.SimpleNamespace(returncode=ant)
 
     assert has_anthropic_credentials(environ, which=which, run=run) is expected
+
+
+def test_ollama_thinking_mode_uses_its_own_sampling_and_a_larger_output_budget() -> None:
+    reply = _chat_reply(GOOD, message={"role": "assistant", "content": GOOD, "thinking": "…"})
+    seen: list[dict[str, Any]] = []
+
+    def record(request: httpx.Request) -> httpx.Response:
+        seen.append(json.loads(request.content))
+        return reply
+
+    provider = OllamaProvider(think=True, transport=httpx.MockTransport(record))
+
+    result = provider.generate("s", MESSAGES, Out)
+
+    assert result.parsed.text == "merhaba"
+    body = seen[0]
+    assert body["think"] is True
+    assert body["options"]["temperature"] == 0.6
+    assert body["options"]["top_p"] == 0.95
+    assert body["options"]["num_predict"] > 1024
+    assert provider.think is True
+    sent = {k: body["options"][k] for k in ("temperature", "top_p", "top_k", "min_p", "seed")}
+    assert provider.sampling == sent  # what the eval reports record

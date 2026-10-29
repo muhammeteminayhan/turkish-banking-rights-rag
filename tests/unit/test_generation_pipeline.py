@@ -105,9 +105,14 @@ def test_the_prompt_lists_each_passage_with_its_id_and_metadata() -> None:
 
     system, (message,) = provider.prompts[0]
     assert "chunk_id" in system and "birebir" in system
-    assert "[6502:m22:f2]" in message.content
+    assert "chunk_id: 6502:m22:f2" in message.content
     assert "doc_id: 6502 | madde: 22 | fıkra: 2" in message.content
-    assert "fıkra: 2 (metinde yazmıyor, sayıldı)" in message.content
+    assert (
+        "fıkra: 2 (numara metinde yazmıyor, paragraflar sayılarak bulundu; atıfta 2 yaz)"
+        in message.content
+    )
+    assert "sistem ekliyor" not in system  # the model copied this into answers
+    assert "dipnot" in system and "ters çevirme" in system
     assert message.content.rstrip().endswith("Soru: Kart borcu ertelenirse?")
 
 
@@ -237,8 +242,8 @@ def test_passages_over_the_prompt_budget_are_not_shown_and_cannot_be_cited() -> 
     prompt, shown = build_prompt("Soru?", big, [], budget=6000)
 
     assert 1 <= len(shown) < len(big)
-    assert f"[{shown[-1].id}]" in prompt
-    assert f"[{big[len(shown)].id}]" not in prompt
+    assert f"chunk_id: {shown[-1].id}\n" in prompt
+    assert f"chunk_id: {big[len(shown)].id}\n" not in prompt
 
 
 def test_the_prompt_marks_temporary_and_repealed_articles() -> None:

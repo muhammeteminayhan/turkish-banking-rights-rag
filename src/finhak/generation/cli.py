@@ -18,7 +18,7 @@ from typing import TextIO
 
 import psycopg
 
-from finhak.config import database_url
+from finhak.config import database_url, retrieval_device
 from finhak.generation.pipeline import (
     DEFAULT_CONFIG,
     DEFAULT_PASSAGES,
@@ -67,12 +67,14 @@ def provider_from_settings(err: TextIO) -> LLMProvider:
     return choice.provider
 
 
-def open_retrieval(conn: Connection, config: str) -> Retriever:
-    """The production retriever: bge-m3, the reranker when the config reranks, BM25 if used."""
+def open_retrieval(conn: Connection, config: str, device: str) -> Retriever:
+    """The production retriever: bge-m3, the reranker when the config reranks, BM25 if used;
+    the models on `device` (RETRIEVAL_DEVICE: the GPU is the language model's)."""
     cfg = CONFIGS[config]
-    reranker = CrossEncoderReranker() if cfg.rerank else None
+    reranker = CrossEncoderReranker(device=device) if cfg.rerank else None
     uses_bm25 = any(name.startswith("bm25") for name in cfg.retrievers)
-    return open_retriever(conn, make_embedder("bge-m3"), reranker, with_bm25=uses_bm25)
+    embedder = make_embedder("bge-m3", device=device)
+    return open_retriever(conn, embedder, reranker, with_bm25=uses_bm25)
 
 
 def main(
@@ -85,8 +87,9 @@ def main(
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
     try:
         provider = provider_factory() if provider_factory else provider_from_settings(err)
-    except (ValueError, LLMError) as exc:  # e.g. LLM_PROVIDER or OLLAMA_NUM_CTX invalid
-        logger.error("language model settings: %s", exc)
+        device = retrieval_device()
+    except (ValueError, LLMError) as exc:  # e.g. LLM_PROVIDER or RETRIEVAL_DEVICE invalid
+        logger.error("settings: %s", exc)
         return EXIT_FAILED
     try:
         conn = connect(args.database_url or database_url())
@@ -95,7 +98,7 @@ def main(
         return EXIT_FAILED
     with conn:
         try:
-            retriever = open_retrieval(conn, args.config)
+            retriever = open_retrieval(conn, args.config, device)
             result = answer_question(
                 args.question, retriever, provider, config=args.config, limit=args.passages
             )

@@ -1,7 +1,7 @@
 """Pick the provider from LLM_PROVIDER; fall back to Ollama, loudly, when Anthropic can't run.
 
 Settings come from the environment, then .env (finhak.config): LLM_PROVIDER (ollama |
-anthropic), ANTHROPIC_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_NUM_CTX.
+anthropic), ANTHROPIC_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_NUM_CTX, OLLAMA_THINK.
 """
 
 import logging
@@ -28,7 +28,18 @@ def make_ollama(env: Mapping[str, str]) -> LLMProvider:
         base_url=env.get("OLLAMA_BASE_URL") or ollama.DEFAULT_BASE_URL,
         model=env.get("OLLAMA_MODEL") or ollama.DEFAULT_MODEL,
         num_ctx=int(env.get("OLLAMA_NUM_CTX") or ollama.DEFAULT_NUM_CTX),
+        think=_flag(env, "OLLAMA_THINK"),
     )
+
+
+_ON, _OFF = ("1", "true", "yes", "on"), ("", "0", "false", "no", "off")
+
+
+def _flag(env: Mapping[str, str], name: str) -> bool:
+    value = (env.get(name) or "").strip().lower()
+    if value not in _ON + _OFF:  # a typo must not silently mean "off"
+        raise ValueError(f"{name} must be one of {_ON} or {_OFF[1:]}, not {value!r}")
+    return value in _ON
 
 
 def make_anthropic(env: Mapping[str, str]) -> LLMProvider:

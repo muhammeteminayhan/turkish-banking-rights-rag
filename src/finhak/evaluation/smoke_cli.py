@@ -4,8 +4,9 @@
     python eval/smoke_ask.py --golden eval/golden.jsonl
 
 Needs PostgreSQL with the index, the models and a reachable LLM (Ollama by default).
-Writes eval/results/<date>_<time>_smoke/ with report.md and rows.jsonl.
-Exit codes: 0 success, 1 failure (the LLM, the database or the questions missing).
+Writes eval/results/<date>_<time>_smoke/ with report.md, answers.md and rows.jsonl.
+Exit codes: 0 success, 1 failure (the LLM, the database or the questions missing, or a
+run stopped early or interrupted: its partial report is still written).
 """
 
 import argparse
@@ -20,9 +21,16 @@ from typing import TextIO
 
 import psycopg
 
-from finhak.config import database_url
+from finhak.config import database_url, retrieval_device
 from finhak.evaluation.golden import GoldenError, load_golden
-from finhak.evaluation.smoke import load_smoke_ids, render_smoke, run_smoke, summarize_smoke
+from finhak.evaluation.smoke import (
+    SmokeStopped,
+    load_smoke_ids,
+    render_answers,
+    render_smoke,
+    run_smoke,
+    summarize_smoke,
+)
 from finhak.fsutil import atomic_write_text
 from finhak.generation.cli import open_retrieval, provider_from_settings
 from finhak.generation.pipeline import DEFAULT_CONFIG, answer_question
@@ -69,34 +77,55 @@ def main(
 
     try:
         provider = _provider(provider_factory, sys.stderr)
+        device = retrieval_device()
     except (LLMError, ValueError) as exc:  # unreachable, not pulled, or bad settings
-        logger.error("the language model is not usable: %s", exc)
+        logger.error("the language model or the settings are not usable: %s", exc)
         return EXIT_FAILED
+    logger.info("model %s/%s; retrieval models on %s", provider.name, provider.model, device)
     try:
         conn = connect(args.database_url or database_url())
     except psycopg.Error as exc:
         logger.error("database not reachable (docker compose up -d db?): %s", exc)
         return EXIT_FAILED
+    stopped = ""
     with conn:
         try:
-            retriever = open_retrieval(conn, args.config)
+            retriever = open_retrieval(conn, args.config, device)
             rows = run_smoke(
                 [by_id[qid] for qid in ids],
                 lambda q: answer_question(q, retriever, provider, config=args.config),
             )
+        except SmokeStopped as exc:  # keep what ran: the report shows why it stopped
+            rows, stopped = exc.rows, str(exc)
         except (ModelLoadError, IndexMismatch, psycopg.Error) as exc:
             logger.error("%s", exc)
             return EXIT_FAILED
 
     summary = summarize_smoke(rows)
-    context = {"provider": provider.name, "model": provider.model, "config": args.config}
+    context = {
+        "provider": provider.name,
+        "model": provider.model,
+        "config": args.config,
+        "retrieval_device": device,
+        "think": getattr(provider, "think", None),
+        "sampling": getattr(provider, "sampling", None),
+        "stopped": stopped,
+    }
     folder = args.out_dir / f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}_smoke"
     atomic_write_text(folder / "report.md", render_smoke(rows, summary, context))
+    atomic_write_text(folder / "answers.md", render_answers(rows))
     atomic_write_text(
         folder / "rows.jsonl",
         "".join(json.dumps(asdict(row), ensure_ascii=False) + "\n" for row in rows),
     )
     logger.info("smoke: %s → %s", summary, folder)
+    if stopped:
+        logger.error(
+            "stopped early: %s. Check that the model fits on the GPU (`ollama ps`, and the "
+            "shared GPU memory in Task Manager) before running again.",
+            stopped,
+        )
+        return EXIT_FAILED
     return EXIT_OK
 
 
