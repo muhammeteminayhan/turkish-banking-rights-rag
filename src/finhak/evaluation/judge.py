@@ -67,7 +67,7 @@ davranışa göre puanla.
 7. Kaynak listesinin biçimi ve uyarı cümleleri puanı etkilemez.
 """
 
-_CATEGORIES = {
+CATEGORY_NAMES = {
     "dogrudan": "doğrudan bilgi",
     "cok_maddeli": "birden fazla madde",
     "sayisal": "sayısal (tutar, oran, süre)",
@@ -99,7 +99,7 @@ RUBRIC_VERSION = hashlib.sha256(
         [
             JUDGE_SYSTEM,
             json.dumps(json_schema(JudgeOut), sort_keys=True),
-            json.dumps(_CATEGORIES),
+            json.dumps(CATEGORY_NAMES),
             CONSISTENCY_RULE,
         ]
     ).encode()
@@ -151,7 +151,7 @@ def rule_outcome(question: GoldenQuestion, row: SmokeRow) -> Outcome | None:
 
 
 def judge_prompt(question: GoldenQuestion, row: SmokeRow) -> str:
-    lines = [f"Soru: {question.question}", f"Kategori: {_CATEGORIES[question.category]}"]
+    lines = [f"Soru: {question.question}", f"Kategori: {CATEGORY_NAMES[question.category]}"]
     if question.category == "yanlis_onerme":
         lines.append(
             "Not: Sorunun varsayımı yanlış; iyi bir cevap bu varsayımı kaynağa dayanarak düzeltir."
